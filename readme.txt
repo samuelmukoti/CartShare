@@ -5,7 +5,7 @@ Requires at least: 6.2
 Tested up to: 6.7
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -123,6 +123,11 @@ Cart data is stored as JSON in a `LONGTEXT` column in a custom database table (`
 
 == Changelog ==
 
+= 1.0.1 =
+* Added first-run onboarding and setup checklist.
+* Renamed plugin metadata to WP CartShare Pro.
+* Updated author and contributor metadata.
+
 = 1.0.0 =
 * Initial release.
 * Cart save and restore via secure 32-character tokenized URLs.
@@ -137,6 +142,9 @@ Cart data is stored as JSON in a `LONGTEXT` column in a custom database table (`
 * Graceful degradation for deleted products, out-of-stock items, removed variations, and expired coupons.
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+Adds onboarding and updated plugin metadata.
 
 = 1.0.0 =
 Initial release — no upgrade steps required.
