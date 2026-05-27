@@ -9,3 +9,12 @@ composer.lock
 # but ignore any local bind-mount caches just in case).
 .wp-data/
 .db-data/
+
+# DevStation generated files
+.devstation/
+.devstation-security.json
+.devstation-status
+.claude_settings.json
+.worktrees/
+.security-key
+logs/security/
