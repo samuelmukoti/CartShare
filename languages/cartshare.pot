@@ -1,0 +1,688 @@
+# Copyright (C) 2024 CartShare Contributors
+# This file is distributed under the same license as the Save & Share Cart plugin.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Save & Share Cart 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/cartshare/cartshare/issues\n"
+"POT-Creation-Date: 2024-01-01 00:00:00+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: WP-CLI 2.x\n"
+"X-Domain: cartshare\n"
+
+#. Plugin Name of the plugin.
+msgid "Save & Share Cart"
+msgstr ""
+
+#. Plugin URI of the plugin.
+msgid "https://github.com/cartshare/cartshare"
+msgstr ""
+
+#. Description of the plugin.
+msgid "Persist and share WooCommerce carts via secure tokenized URLs."
+msgstr ""
+
+#. Author of the plugin.
+msgid "CartShare Contributors"
+msgstr ""
+
+#: includes/class-cartshare-cart.php
+#, php-format
+msgctxt "translators: %d: WooCommerce product ID"
+msgid "Could not restore product #%d (deleted or out of stock)."
+msgstr ""
+
+#: includes/class-cartshare-cart.php
+#, php-format
+msgctxt "translators: %s: coupon code"
+msgid "Coupon \"%s\" is no longer valid."
+msgstr ""
+
+#: includes/class-cartshare-db.php
+msgid "Failed to save cart. Please try again."
+msgstr ""
+
+#: includes/class-cartshare-rest.php
+msgid "Invalid or missing nonce."
+msgstr ""
+
+#: includes/class-cartshare-rest.php
+msgid "You must be logged in to view saved carts."
+msgstr ""
+
+#: includes/class-cartshare-rest.php
+msgid "Cannot save an empty cart."
+msgstr ""
+
+#: includes/class-cartshare-rest.php
+msgid "Cart not found or has expired."
+msgstr ""
+
+#: includes/class-cartshare-rest.php
+msgid "Email sharing is disabled."
+msgstr ""
+
+#: includes/class-cartshare-rest.php
+msgid "A valid recipient email address is required."
+msgstr ""
+
+#: includes/class-cartshare-rest.php
+msgid "A share URL is required."
+msgstr ""
+
+#: includes/class-cartshare-rest.php
+msgid "Email sending is not available."
+msgstr ""
+
+#: includes/class-cartshare-rest.php
+msgid "Failed to send the email. Please try again."
+msgstr ""
+
+#: includes/class-cartshare-rest.php
+msgid "You do not have permission to delete this cart."
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+msgid "Save & Share Cart"
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+msgid "Saving\xe2\x80\xa6"
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+msgid "Copy Link"
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+msgid "Copied!"
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+#: templates/admin-settings.php
+msgid "Email"
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+#: templates/admin-settings.php
+msgid "Print"
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+#: templates/admin-settings.php
+msgid "Facebook"
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+#: templates/admin-settings.php
+msgid "Messenger"
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+#: templates/admin-settings.php
+msgid "WhatsApp"
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+#: templates/admin-settings.php
+msgid "X / Twitter"
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+#: templates/admin-settings.php
+msgid "LinkedIn"
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+#: templates/admin-settings.php
+msgid "Skype"
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+msgid "Close"
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+msgid "Replace your current cart?"
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+msgid "Your current cart items will be replaced. Continue?"
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+msgid "Yes, restore"
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+msgid "Cancel"
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+msgid "Your cart is empty. Add items before sharing."
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+msgid "Something went wrong. Please try again."
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+msgid "Recipient email"
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+msgid "Message (optional)"
+msgstr ""
+
+#: includes/class-cartshare-frontend.php
+msgid "Send"
+msgstr ""
+
+#: includes/class-cartshare-admin.php
+msgid "Save & Share Cart Settings"
+msgstr ""
+
+#: includes/class-cartshare-admin.php
+msgid "Are you sure you want to delete this cart? This action cannot be undone."
+msgstr ""
+
+#: includes/class-cartshare-admin.php
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: includes/class-cartshare-admin.php
+msgid "You do not have permission to perform this action."
+msgstr ""
+
+#: includes/class-cartshare-email.php
+#, php-format
+msgctxt "translators: %s: sender display name"
+msgid "%s shared a cart with you"
+msgstr ""
+
+#: includes/class-cartshare-myaccount.php
+msgid "Saved Carts"
+msgstr ""
+
+#: includes/class-cartshare-myaccount.php
+msgid "You must be logged in to manage saved carts."
+msgstr ""
+
+#: includes/class-cartshare-myaccount.php
+msgid "Invalid cart token."
+msgstr ""
+
+#: includes/class-cartshare-myaccount.php
+msgid "Cart not found."
+msgstr ""
+
+#: includes/class-cartshare-myaccount.php
+msgid "You do not have permission to manage this cart."
+msgstr ""
+
+#: includes/class-cartshare-myaccount.php
+msgid "Cart deleted successfully."
+msgstr ""
+
+#: includes/class-cartshare-myaccount.php
+msgid "Could not delete the cart. Please try again."
+msgstr ""
+
+#: includes/class-cartshare-myaccount.php
+msgid "Cart data is invalid and could not be restored."
+msgstr ""
+
+#: includes/class-cartshare-myaccount.php
+msgid "Cart restored successfully."
+msgstr ""
+
+#: templates/popup.php
+msgid "Share URL"
+msgstr ""
+
+#: templates/popup.php
+msgid "Save Cart"
+msgstr ""
+
+#: templates/popup.php
+msgid "Sharing channels"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Settings saved."
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "General"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Sharing"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Appearance"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "History"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "After Restore, Redirect To"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Cart page"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Checkout page"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Where to send the visitor after a share link restores their cart."
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Cart Expiration"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Days"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Weeks"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Months"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "How long saved cart share links remain valid. Set to 0 to never expire."
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Allow Multiple Saved Carts"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Allow users to save more than one cart at a time"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Flush Cart on Save"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Empty the active cart after saving it to a share link"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Flush Cart on Replace"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Empty the active cart before restoring a shared cart"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Enable Replace Button"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Show a \xe2\x80\x9cReplace Cart\xe2\x80\x9d confirmation button when restoring into a non-empty cart"
+msgstr ""
+
+#: templates/admin-settings.php
+#, php-format
+msgctxt "translators: %s: channel name"
+msgid "Enable the %s sharing channel"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Email Logo URL"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Absolute URL of the logo image shown at the top of share emails. Leave blank to use no logo."
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Header / Accent Color"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Email Footer Background Color"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "CTA Button Background Color"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "CTA Button Text Color"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Email Subject"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Someone shared a cart with you!"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Email Button Label"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "View Shared Cart"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Email Header Text"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Someone shared a cart with you"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Email Footer Text"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Optional text shown at the bottom of share emails."
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Popup Colors"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Header Background"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Header Text"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Body Background"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Body Text"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Footer Background"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Footer Text"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Overlay Color"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Overlay Opacity"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "0 = transparent, 1 = fully opaque."
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Labels & Text"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Trigger Button Label"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Popup Title"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "\xe2\x80\x9cSave\xe2\x80\x9d Button Label"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "\xe2\x80\x9cCopy Link\xe2\x80\x9d Button Label"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "\xe2\x80\x9cPrint\xe2\x80\x9d Button Label"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "\xe2\x80\x9cEmail\xe2\x80\x9d Button Label"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "\xe2\x80\x9cFacebook\xe2\x80\x9d Button Label"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "\xe2\x80\x9cMessenger\xe2\x80\x9d Button Label"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "\xe2\x80\x9cWhatsApp\xe2\x80\x9d Button Label"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "\xe2\x80\x9cX / Twitter\xe2\x80\x9d Button Label"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "\xe2\x80\x9cLinkedIn\xe2\x80\x9d Button Label"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "\xe2\x80\x9cSkype\xe2\x80\x9d Button Label"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Cart History"
+msgstr ""
+
+#: templates/admin-settings.php
+#, php-format
+msgctxt "translators: %d: total number of saved carts"
+msgid "%d saved carts in total."
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "No saved carts found."
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Cart ID"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Customer / Guest"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Created"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Expires"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Items"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Token Preview"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Actions"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Guest: "
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "(Unknown)"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Never"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Expired"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Restore"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Delete"
+msgstr ""
+
+#: templates/admin-settings.php
+#, php-format
+msgctxt "translators: %d: number of items"
+msgid "%d items"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Save General Settings"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Save Sharing Settings"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Save Appearance Settings"
+msgstr ""
+
+#: templates/admin-settings.php
+msgid "Save Email Settings"
+msgstr ""
+
+#: templates/print-cart.php
+#, php-format
+msgctxt "translators: %s: site name"
+msgid "Cart \xe2\x80\x94 %s"
+msgstr ""
+
+#: templates/print-cart.php
+#, php-format
+msgctxt "translators: %d: product ID that could not be found"
+msgid "Product #%d (unavailable)"
+msgstr ""
+
+#: templates/print-cart.php
+msgid "Saved Cart"
+msgstr ""
+
+#: templates/print-cart.php
+msgid "This cart link is invalid or has expired. Please ask the sender for a new link."
+msgstr ""
+
+#: templates/print-cart.php
+msgid "This cart is empty."
+msgstr ""
+
+#: templates/print-cart.php
+msgid "Product"
+msgstr ""
+
+#: templates/print-cart.php
+msgid "Qty"
+msgstr ""
+
+#: templates/print-cart.php
+msgid "Price"
+msgstr ""
+
+#: templates/print-cart.php
+msgid "Subtotal"
+msgstr ""
+
+#: templates/print-cart.php
+#, php-format
+msgctxt "translators: %s: formatted total price"
+msgid "Total: %s"
+msgstr ""
+
+#: templates/print-cart.php
+msgid "Coupons applied:"
+msgstr ""
+
+#: templates/email-share.php
+msgid "Someone shared a cart with you!"
+msgstr ""
+
+#: templates/email-share.php
+#, php-format
+msgctxt "translators: %s: sender display name"
+msgid "%s has saved a cart and wants to share it with you."
+msgstr ""
+
+#: templates/email-share.php
+msgid "Click the button below to view the cart and restore it with one click."
+msgstr ""
+
+#: templates/email-share.php
+msgid "View &amp; Restore Cart"
+msgstr ""
+
+#: templates/email-share.php
+msgid "Or copy this link into your browser:"
+msgstr ""
+
+#: templates/email-share.php
+#, php-format
+msgctxt "translators: %s: site name"
+msgid "You received this email because someone used the Save &amp; Share Cart feature on %s."
+msgstr ""
+
+#: templates/myaccount-saved-carts.php
+msgid "You have no saved carts yet. Add items to your cart and click \xe2\x80\x9cSave &amp; Share Cart\xe2\x80\x9d to save one."
+msgstr ""
+
+#: templates/myaccount-saved-carts.php
+msgid "Cart Name"
+msgstr ""
+
+#: templates/myaccount-saved-carts.php
+msgid "Saved"
+msgstr ""
+
+#: templates/myaccount-saved-carts.php
+msgid "(Unnamed)"
+msgstr ""
+
+#: templates/myaccount-saved-carts.php
+msgid "(Expired)"
+msgstr ""
+
+#: templates/myaccount-saved-carts.php
+msgid "Are you sure you want to delete this cart?"
+msgstr ""
