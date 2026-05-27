@@ -1,5 +1,5 @@
-=== Save & Share Cart ===
-Contributors: cartshare
+=== WP CartShare Pro ===
+Contributors: Samuel Mukoti <sam@melivo.com>
 Tags: woocommerce, cart, share, save cart, share cart
 Requires at least: 6.2
 Tested up to: 6.7
@@ -13,7 +13,7 @@ Persist and share WooCommerce carts via secure tokenized URLs — with 9 sharing
 
 == Description ==
 
-**Save & Share Cart** lets shoppers persist their current WooCommerce cart to a secure, tokenized URL so it can be restored later or shared with others in seconds.
+**WP CartShare Pro** lets shoppers persist their current WooCommerce cart to a secure, tokenized URL so it can be restored later or shared with others in seconds.
 
 = Key Features =
 
@@ -53,9 +53,9 @@ Persist and share WooCommerce carts via secure tokenized URLs — with 9 sharing
 
 1. Upload the `cartshare` folder to the `/wp-content/plugins/` directory, or install the plugin directly from the WordPress Plugins screen.
 2. Ensure **WooCommerce** is installed and activated.
-3. Activate **Save & Share Cart** through the Plugins menu in WordPress Admin.
+3. Activate **WP CartShare Pro** through the Plugins menu in WordPress Admin.
 4. The plugin will automatically create its database table and schedule the daily cleanup cron event.
-5. Navigate to **WooCommerce → Save & Share Cart** to configure settings.
+5. Navigate to **WooCommerce → WP CartShare Pro** to configure setup and settings.
 
 = Using WP-CLI =
 
@@ -65,7 +65,7 @@ wp plugin activate cartshare
 
 = Configuring Expiration =
 
-By default, saved carts expire after 30 days. You can adjust this under **WooCommerce → Save & Share Cart → General → Cart Expiration**.
+By default, saved carts expire after 30 days. You can adjust this under **WooCommerce → WP CartShare Pro → General → Cart Expiration**.
 
 > **Note:** If you have disabled WP-Cron (`DISABLE_WP_CRON = true`), you must configure a system-level cron alternative (e.g., a server cron job calling `wp cron event run cartshare_cleanup_event`) to ensure expired carts are purged.
 
@@ -97,11 +97,11 @@ Yes. When saving, a user can optionally provide a name for the cart. Names are m
 
 = How do I delete all saved carts? =
 
-Individual carts can be deleted from **My Account → Saved Carts** (by the cart owner) or from **WooCommerce → Save & Share Cart → History** (by administrators). Expired carts are purged automatically by the daily WP-Cron job. Uninstalling the plugin removes the entire table and all associated options.
+Individual carts can be deleted from **My Account → Saved Carts** (by the cart owner) or from **WooCommerce → WP CartShare Pro → History** (by administrators). Expired carts are purged automatically by the daily WP-Cron job. Uninstalling the plugin removes the entire table and all associated options.
 
 = Is the plugin compatible with HPOS? =
 
-Yes. Save & Share Cart declares full compatibility with WooCommerce High-Performance Order Storage (HPOS / custom order tables). The plugin never touches order data, so compatibility is unconditional.
+Yes. WP CartShare Pro declares full compatibility with WooCommerce High-Performance Order Storage (HPOS / custom order tables). The plugin never touches order data, so compatibility is unconditional.
 
 = Does the plugin require Composer or npm? =
 

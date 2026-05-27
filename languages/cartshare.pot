@@ -1,11 +1,11 @@
-# Copyright (C) 2024 CartShare Contributors
-# This file is distributed under the same license as the Save & Share Cart plugin.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Copyright (C) 2024 Samuel Mukoti
+# This file is distributed under the same license as the WP CartShare Pro plugin.
+# Samuel Mukoti <sam@melivo.com>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Save & Share Cart 1.0.0\n"
+"Project-Id-Version: WP CartShare Pro 1.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/cartshare/cartshare/issues\n"
 "POT-Creation-Date: 2024-01-01 00:00:00+00:00\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Domain: cartshare\n"
 
 #. Plugin Name of the plugin.
-msgid "Save & Share Cart"
+msgid "WP CartShare Pro"
 msgstr ""
 
 #. Plugin URI of the plugin.
@@ -30,7 +30,7 @@ msgid "Persist and share WooCommerce carts via secure tokenized URLs."
 msgstr ""
 
 #. Author of the plugin.
-msgid "CartShare Contributors"
+msgid "Samuel Mukoti"
 msgstr ""
 
 #: includes/class-cartshare-cart.php
