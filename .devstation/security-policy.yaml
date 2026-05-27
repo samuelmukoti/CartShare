@@ -1,0 +1,31 @@
+version: 1
+generated_by: devstation
+
+pull_request:
+  required:
+    tests: true
+    lint: true
+    secrets: true
+    dependency_review: true
+    sast: true
+    filesystem_scan: true
+  thresholds:
+    fail_on_severity:
+      - critical
+      - high
+    warn_on_severity:
+      - medium
+      - low
+
+github_actions:
+  default_permissions: read-only
+  require_explicit_permissions: true
+  allow_pull_request_target: false
+  prefer_pinned_actions: true
+
+nightly:
+  codeql: true
+  trivy_filesystem: true
+  osv_recursive: true
+  dast_baseline: optional
+

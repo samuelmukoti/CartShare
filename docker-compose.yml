@@ -1,0 +1,55 @@
+# DevStation Live Preview — WordPress + MySQL with CartShare mounted.
+#
+# Local:    docker compose up -d   → http://localhost:8080
+# Hosted:   click Publish in the Test Center → Live Preview tab. The same
+#           compose file is shipped to the platform's preview service and
+#           deployed via its compose build-strategy; the platform routes a
+#           public URL to the `wordpress` service.
+
+services:
+  wordpress:
+    image: wordpress:latest
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    labels:
+      # Convention used by DevStation's preview compose-parser to pick which
+      # service receives the public URL. Safe to leave on for local runs.
+      devstation.public: "true"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DEBUG: "1"
+    volumes:
+      # Persist /var/www/html so wp-config.php, themes, uploads survive
+      # `docker compose down` (use `-v` to wipe).
+      - wp_data:/var/www/html
+      # Bind the plugin source into wp-content/plugins/<slug>/ — this is
+      # what makes the plugin appear in WordPress and stay in sync with
+      # edits in this repo.
+      - ./:/var/www/html/wp-content/plugins/cartshare/
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uwordpress", "-pwordpress"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  wp_data:
+  db_data:

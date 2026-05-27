@@ -1,0 +1,11 @@
+vendor/
+composer.lock
+.phpunit.result.cache
+.env
+.env.*
+!.env.example
+
+# docker-compose volumes (named — Docker stores them outside the repo,
+# but ignore any local bind-mount caches just in case).
+.wp-data/
+.db-data/

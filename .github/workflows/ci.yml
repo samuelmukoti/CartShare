@@ -1,0 +1,52 @@
+name: CartShare CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          tools: composer, phpcs
+
+      - name: Install deps
+        run: |
+          if [ -f composer.json ]; then
+            composer install --no-progress --no-interaction
+          fi
+
+      - name: Install WordPress Coding Standards
+        run: |
+          composer global require --dev wp-coding-standards/wpcs:"^3.0" \
+            dealerdirect/phpcodesniffer-composer-installer:"^1.0" \
+            --no-progress --no-interaction
+          echo "$HOME/.composer/vendor/bin" >> $GITHUB_PATH
+
+      - name: Lint (WPCS)
+        run: |
+          phpcs --standard=WordPress \
+            --extensions=php \
+            --ignore=vendor/,node_modules/ \
+            .
+
+      - name: Test
+        if: hashFiles('phpunit.xml*') != ''
+        run: vendor/bin/phpunit

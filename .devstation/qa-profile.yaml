@@ -1,0 +1,50 @@
+profile: wordpress-plugin
+version: 1
+generated_by: devstation
+
+stages:
+  stage1:
+    name: local-fast
+    budget: 5s
+    intent: catch formatting, lint, and obvious secrets before commit
+  stage2:
+    name: pre-push
+    budget: 60s
+    intent: run fast tests and dependency checks before code leaves the machine
+  stage3:
+    name: pull-request
+    budget: 10m
+    intent: block merges on tests, SAST, secrets, dependency, and filesystem risk
+  stage4:
+    name: preview
+    budget: manual
+    intent: run DAST and smoke checks against a preview or staging URL
+  stage6:
+    name: nightly
+    budget: scheduled
+    intent: run deeper scans without slowing down pull requests
+
+policy:
+  block_on:
+    - tests
+    - secrets
+    - high-or-critical-dependencies
+    - high-or-critical-sast
+  advisory:
+    - medium-sast
+    - license-review
+    - dast-baseline
+
+tools:
+  sast:
+    - semgrep
+  secrets:
+    - gitleaks
+  dependencies:
+    - dependency-review
+    - osv-scanner
+  filesystem:
+    - trivy
+  pr_review:
+    - devstation-pr-agent
+
