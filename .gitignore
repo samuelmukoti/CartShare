@@ -9,3 +9,11 @@ composer.lock
 # but ignore any local bind-mount caches just in case).
 .wp-data/
 .db-data/
+
+# DevStation data directory
+.devstation/
+.devstation-status
+.devstation-security.json
+
+# Local Claude Code settings
+.claude_settings.json

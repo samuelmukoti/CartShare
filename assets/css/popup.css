@@ -1,0 +1,382 @@
+/**
+ * CartShare popup styles.
+ *
+ * CSS custom properties are set inline by popup.js using values passed via
+ * wp_localize_script() from CartShare_Frontend::get_color_vars(), so admin
+ * colour settings flow into the UI without re-enqueuing any assets.
+ *
+ * @package CartShare
+ */
+
+/* =========================================================
+   Custom properties (defaults — overridden by JS at runtime)
+   ========================================================= */
+:root {
+	--cartshare-primary:     #4f46e5;
+	--cartshare-button-bg:   #4f46e5;
+	--cartshare-button-text: #ffffff;
+}
+
+/* =========================================================
+   Trigger button (below cart totals)
+   ========================================================= */
+.cartshare-button-wrap {
+	margin-top: 1rem;
+	text-align: center;
+}
+
+.cartshare-open.button {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	background-color: var(--cartshare-button-bg);
+	color: var(--cartshare-button-text);
+	border: none;
+	border-radius: 4px;
+	padding: 0.75rem 1.5rem;
+	font-size: 1rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: opacity 0.15s ease;
+}
+
+.cartshare-open.button:hover,
+.cartshare-open.button:focus {
+	opacity: 0.85;
+}
+
+/* =========================================================
+   Overlay
+   ========================================================= */
+.cartshare-popup-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 99999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.55);
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.cartshare-popup-overlay.is-open {
+	opacity: 1;
+	visibility: visible;
+}
+
+/* =========================================================
+   Dialog box
+   ========================================================= */
+.cartshare-popup-dialog {
+	position: relative;
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+	max-width: 480px;
+	width: calc(100% - 2rem);
+	max-height: calc(100vh - 4rem);
+	overflow-y: auto;
+	outline: none;
+}
+
+/* =========================================================
+   Header
+   ========================================================= */
+.cartshare-popup-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 1.25rem 1.5rem 1rem;
+	border-bottom: 1px solid #e5e7eb;
+}
+
+.cartshare-popup-title {
+	margin: 0;
+	font-size: 1.125rem;
+	font-weight: 700;
+	color: #111827;
+	line-height: 1.3;
+}
+
+.cartshare-popup-close {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: none;
+	border: none;
+	font-size: 1.5rem;
+	line-height: 1;
+	color: #6b7280;
+	cursor: pointer;
+	padding: 0.25rem;
+	border-radius: 4px;
+	transition: color 0.15s ease, background 0.15s ease;
+}
+
+.cartshare-popup-close:hover,
+.cartshare-popup-close:focus {
+	color: #111827;
+	background: #f3f4f6;
+}
+
+/* =========================================================
+   Body
+   ========================================================= */
+.cartshare-popup-body {
+	padding: 1.25rem 1.5rem 1.5rem;
+}
+
+/* =========================================================
+   Status / notices
+   ========================================================= */
+.cartshare-status {
+	margin-bottom: 1rem;
+	font-size: 0.9rem;
+}
+
+.cartshare-status:empty {
+	display: none;
+}
+
+.cartshare-status.is-error {
+	color: #dc2626;
+	background: #fef2f2;
+	border: 1px solid #fecaca;
+	border-radius: 4px;
+	padding: 0.5rem 0.75rem;
+}
+
+.cartshare-status.is-success {
+	color: #16a34a;
+	background: #f0fdf4;
+	border: 1px solid #bbf7d0;
+	border-radius: 4px;
+	padding: 0.5rem 0.75rem;
+}
+
+.cartshare-status.is-info {
+	color: #1d4ed8;
+	background: #eff6ff;
+	border: 1px solid #bfdbfe;
+	border-radius: 4px;
+	padding: 0.5rem 0.75rem;
+}
+
+/* =========================================================
+   Share-link row
+   ========================================================= */
+.cartshare-share-link-row {
+	display: flex;
+	gap: 0.5rem;
+	margin-bottom: 1.25rem;
+}
+
+.cartshare-share-url {
+	flex: 1;
+	padding: 0.5rem 0.75rem;
+	border: 1px solid #d1d5db;
+	border-radius: 4px;
+	font-size: 0.875rem;
+	color: #374151;
+	background: #f9fafb;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.cartshare-copy-btn.button {
+	white-space: nowrap;
+	background: var(--cartshare-primary);
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	padding: 0.5rem 0.875rem;
+	font-size: 0.875rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: opacity 0.15s ease;
+}
+
+.cartshare-copy-btn.button:hover,
+.cartshare-copy-btn.button:focus {
+	opacity: 0.85;
+}
+
+/* =========================================================
+   Channel grid
+   ========================================================= */
+.cartshare-channels {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+	gap: 0.75rem;
+}
+
+.cartshare-channel-btn {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.75rem 0.5rem;
+	background: #f3f4f6;
+	border: 1px solid #e5e7eb;
+	border-radius: 6px;
+	font-size: 0.8rem;
+	font-weight: 600;
+	color: #374151;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+	transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.cartshare-channel-btn:hover,
+.cartshare-channel-btn:focus {
+	background: var(--cartshare-primary);
+	border-color: var(--cartshare-primary);
+	color: #fff;
+}
+
+.cartshare-channel-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* Save button — primary style from the start */
+.cartshare-btn-save {
+	background: var(--cartshare-button-bg);
+	border-color: var(--cartshare-button-bg);
+	color: var(--cartshare-button-text);
+	grid-column: 1 / -1; /* Full width on first row */
+}
+
+.cartshare-btn-save:hover,
+.cartshare-btn-save:focus {
+	opacity: 0.85;
+	background: var(--cartshare-button-bg);
+	border-color: var(--cartshare-button-bg);
+	color: var(--cartshare-button-text);
+}
+
+/* Per-channel brand tints (applied on hover via a data attribute approach in JS) */
+.cartshare-btn-facebook:hover  { background: #1877f2; border-color: #1877f2; color: #fff; }
+.cartshare-btn-messenger:hover { background: #0084ff; border-color: #0084ff; color: #fff; }
+.cartshare-btn-whatsapp:hover  { background: #25d366; border-color: #25d366; color: #fff; }
+.cartshare-btn-twitter:hover   { background: #000;    border-color: #000;    color: #fff; }
+.cartshare-btn-linkedin:hover  { background: #0a66c2; border-color: #0a66c2; color: #fff; }
+.cartshare-btn-skype:hover     { background: #00aff0; border-color: #00aff0; color: #fff; }
+
+/* =========================================================
+   Email sub-form
+   ========================================================= */
+.cartshare-email-form {
+	margin-top: 1.25rem;
+	padding-top: 1.25rem;
+	border-top: 1px solid #e5e7eb;
+}
+
+.cartshare-email-form p {
+	margin-bottom: 0.75rem;
+}
+
+.cartshare-email-form label {
+	display: block;
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: #374151;
+	margin-bottom: 0.3rem;
+}
+
+.cartshare-email-recipient,
+.cartshare-email-message {
+	width: 100%;
+	padding: 0.5rem 0.75rem;
+	border: 1px solid #d1d5db;
+	border-radius: 4px;
+	font-size: 0.9rem;
+	color: #111827;
+	font-family: inherit;
+	box-sizing: border-box;
+}
+
+.cartshare-email-message {
+	resize: vertical;
+}
+
+.cartshare-email-send.button {
+	background: var(--cartshare-primary);
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	padding: 0.6rem 1.25rem;
+	font-size: 0.9rem;
+	font-weight: 600;
+	cursor: pointer;
+	margin-right: 0.5rem;
+	transition: opacity 0.15s ease;
+}
+
+.cartshare-email-send.button:hover,
+.cartshare-email-send.button:focus {
+	opacity: 0.85;
+}
+
+.cartshare-email-cancel.button {
+	background: #f3f4f6;
+	color: #374151;
+	border: 1px solid #e5e7eb;
+	border-radius: 4px;
+	padding: 0.6rem 1.25rem;
+	font-size: 0.9rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background 0.15s ease;
+}
+
+.cartshare-email-cancel.button:hover,
+.cartshare-email-cancel.button:focus {
+	background: #e5e7eb;
+}
+
+/* =========================================================
+   Mobile responsive
+   ========================================================= */
+@media (max-width: 480px) {
+	.cartshare-popup-dialog {
+		border-radius: 8px 8px 0 0;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		max-width: 100%;
+		width: 100%;
+		max-height: 85vh;
+	}
+
+	.cartshare-popup-overlay {
+		align-items: flex-end;
+	}
+
+	.cartshare-channels {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	.cartshare-btn-save {
+		grid-column: 1 / -1;
+	}
+}
+
+/* =========================================================
+   Accessibility: reduce motion
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+	.cartshare-popup-overlay,
+	.cartshare-channel-btn,
+	.cartshare-open.button,
+	.cartshare-copy-btn.button,
+	.cartshare-email-send.button {
+		transition: none;
+	}
+}

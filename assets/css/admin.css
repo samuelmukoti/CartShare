@@ -1,0 +1,330 @@
+/**
+ * CartShare Admin Styles
+ *
+ * Scoped to .cartshare-admin to avoid leaking into other WP Admin pages.
+ *
+ * @package CartShare
+ */
+
+/* ============================================================
+	Wrapper
+	============================================================ */
+.cartshare-admin {
+	max-width: 1120px;
+}
+
+.cartshare-admin h1 {
+	margin-bottom: 0.25em;
+}
+
+/* ============================================================
+	Setup / onboarding
+	============================================================ */
+.cartshare-setup-hero {
+	display: flex;
+	align-items: stretch;
+	justify-content: space-between;
+	gap: 24px;
+	margin: 20px 0;
+	padding: 24px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+}
+
+.cartshare-setup-hero h2 {
+	margin: 4px 0 8px;
+	font-size: 24px;
+	line-height: 1.25;
+}
+
+.cartshare-setup-hero p {
+	max-width: 680px;
+	margin: 0;
+	color: #50575e;
+	font-size: 14px;
+	line-height: 1.6;
+}
+
+.cartshare-eyebrow {
+	color: #2271b1 !important;
+	font-size: 12px !important;
+	font-weight: 700;
+	letter-spacing: 0;
+	text-transform: uppercase;
+}
+
+.cartshare-setup-score {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	min-width: 150px;
+	padding: 16px;
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	text-align: center;
+}
+
+.cartshare-setup-score span,
+.cartshare-setup-score small {
+	color: #646970;
+}
+
+.cartshare-setup-score strong {
+	display: block;
+	margin: 6px 0;
+	color: #1d2327;
+	font-size: 28px;
+	line-height: 1;
+}
+
+.cartshare-status-grid {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 12px;
+	margin-bottom: 20px;
+}
+
+.cartshare-status-card {
+	position: relative;
+	min-height: 112px;
+	padding: 16px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-left-width: 4px;
+	border-radius: 4px;
+}
+
+.cartshare-status-card h3 {
+	margin: 0 0 8px;
+	font-size: 14px;
+}
+
+.cartshare-status-card p {
+	margin: 0;
+	color: #50575e;
+}
+
+.cartshare-status-card.is-ready {
+	border-left-color: #00a32a;
+}
+
+.cartshare-status-card.needs-attention {
+	border-left-color: #d63638;
+}
+
+.cartshare-status-dot {
+	position: absolute;
+	top: 16px;
+	right: 16px;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: #d63638;
+}
+
+.cartshare-status-card.is-ready .cartshare-status-dot {
+	background: #00a32a;
+}
+
+.cartshare-setup-layout {
+	display: grid;
+	grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+	gap: 20px;
+	align-items: start;
+}
+
+.cartshare-setup-panel {
+	padding: 20px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+}
+
+.cartshare-setup-panel h2 {
+	margin-top: 0;
+}
+
+.cartshare-channel-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(140px, 1fr));
+	gap: 10px 14px;
+	max-width: 620px;
+}
+
+.cartshare-channel-grid label {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.cartshare-launch-checklist ol {
+	margin-left: 20px;
+}
+
+.cartshare-launch-checklist li {
+	margin-bottom: 10px;
+}
+
+/* ============================================================
+	Settings form — spacing helpers
+	============================================================ */
+.cartshare-settings-form .form-table th {
+	width: 220px;
+	padding-top: 16px;
+}
+
+.cartshare-settings-form .form-table td {
+	padding-top: 12px;
+	padding-bottom: 12px;
+}
+
+.cartshare-settings-form .form-table .description {
+	margin-top: 4px;
+	color: #646970;
+}
+
+/* ============================================================
+	Color picker — compact wrapper
+	============================================================ */
+.cartshare-admin .wp-picker-container .wp-color-result {
+	height: 30px;
+}
+
+/* ============================================================
+	History table
+	============================================================ */
+.cartshare-history-header {
+	display: flex;
+	align-items: baseline;
+	gap: 1rem;
+	margin-top: 1rem;
+}
+
+.cartshare-history-header h2 {
+	margin: 0;
+}
+
+.cartshare-history-table {
+	margin-top: 0.5rem;
+}
+
+.cartshare-history-table th,
+.cartshare-history-table td {
+	vertical-align: middle;
+	padding: 8px 10px;
+}
+
+.cartshare-history-table .cartshare-history-actions {
+	white-space: nowrap;
+}
+
+.cartshare-history-table .cartshare-history-actions .button {
+	margin-right: 4px;
+}
+
+.cartshare-history-table .cartshare-history-actions .button:last-child {
+	margin-right: 0;
+}
+
+/* Expired row — muted appearance */
+.cartshare-history-table tr.cartshare-expired td {
+	color: #a7aaad;
+}
+
+/* ============================================================
+	Badges
+	============================================================ */
+.cartshare-badge {
+	display: inline-block;
+	padding: 1px 7px;
+	border-radius: 3px;
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 1.6;
+	vertical-align: middle;
+	margin-left: 4px;
+}
+
+.cartshare-badge--expired {
+	background: #f0f0f1;
+	color: #a7aaad;
+	border: 1px solid #c3c4c7;
+}
+
+/* ============================================================
+	Delete button link style
+	============================================================ */
+.cartshare-delete-form {
+	display: inline;
+}
+
+button.cartshare-delete-cart {
+	color: #b32d2e;
+	border-color: transparent;
+	background: transparent;
+	box-shadow: none;
+	cursor: pointer;
+}
+
+button.cartshare-delete-cart:hover,
+button.cartshare-delete-cart:focus {
+	color: #a00;
+	border-color: #a00;
+	background: transparent;
+}
+
+/* ============================================================
+	Pagination
+	============================================================ */
+.cartshare-admin .tablenav.bottom {
+	margin-top: 0.5rem;
+}
+
+.cartshare-admin .pagination-links .page-numbers {
+	display: inline-block;
+	min-width: 30px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	border: 1px solid #c3c4c7;
+	border-radius: 3px;
+	margin: 0 2px;
+	text-decoration: none;
+	background: #fff;
+	color: #2271b1;
+}
+
+.cartshare-admin .pagination-links .page-numbers.current {
+	background: #2271b1;
+	color: #fff;
+	border-color: #2271b1;
+}
+
+.cartshare-admin .pagination-links .page-numbers:hover:not(.current) {
+	border-color: #2271b1;
+}
+
+@media (max-width: 960px) {
+	.cartshare-setup-hero,
+	.cartshare-setup-layout {
+		display: block;
+	}
+
+	.cartshare-setup-score,
+	.cartshare-launch-checklist {
+		margin-top: 16px;
+	}
+
+	.cartshare-status-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 600px) {
+	.cartshare-status-grid,
+	.cartshare-channel-grid {
+		grid-template-columns: 1fr;
+	}
+}
