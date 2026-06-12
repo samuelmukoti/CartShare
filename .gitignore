@@ -12,9 +12,11 @@ composer.lock
 
 # DevStation generated files
 .devstation/
-.devstation-security.json
 .devstation-status
-.claude_settings.json
+.devstation-security.json
 .worktrees/
 .security-key
 logs/security/
+
+# Local Claude Code settings
+.claude_settings.json
