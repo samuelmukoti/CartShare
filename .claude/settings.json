@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(vendor/bin/phpunit*)",
+      "Bash(./vendor/bin/phpunit*)",
+      "Bash(vendor/bin/phpcs*)",
+      "Bash(./vendor/bin/phpcs*)"
+    ]
+  }
+}
