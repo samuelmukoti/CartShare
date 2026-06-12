@@ -314,4 +314,42 @@ class Test_CartShare_DB extends TestCase {
 		$this->assertNull( $this->db->find_by_token( $token1 ) );
 		$this->assertNotNull( $this->db->find_by_token( $token2 ) );
 	}
+
+	/**
+	 * insert() must persist the source column when provided.
+	 *
+	 * Verifies the $data array passed to $wpdb->insert() includes 'source'
+	 * by reading back the stored row via find_by_token().
+	 */
+	public function test_insert_stores_source() {
+		$cart_data = array( 'items' => array(), 'coupons' => array() );
+
+		$token = $this->db->insert( $cart_data, 1, null, 86400, null, 'admin-created' );
+
+		$this->assertIsString( $token );
+
+		$row = $this->db->find_by_token( $token );
+
+		$this->assertNotNull( $row );
+		$this->assertSame( 'admin-created', $row['source'] );
+	}
+
+	/**
+	 * insert() must work with a null $source for backward compatibility.
+	 *
+	 * Existing call-sites that do not pass a source must not break.
+	 */
+	public function test_insert_source_nullable() {
+		$cart_data = array( 'items' => array(), 'coupons' => array() );
+
+		$token = $this->db->insert( $cart_data, 1, null, 86400, null, null );
+
+		$this->assertIsString( $token );
+		$this->assertSame( 32, strlen( $token ) );
+
+		$row = $this->db->find_by_token( $token );
+
+		$this->assertNotNull( $row );
+		$this->assertNull( $row['source'] );
+	}
 }

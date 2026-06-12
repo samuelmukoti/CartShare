@@ -419,6 +419,162 @@ if ( ! function_exists( 'absint' ) ) {
 	}
 }
 
+if ( ! function_exists( 'sanitize_key' ) ) {
+	/**
+	 * Stub: lowercases and strips non-alphanumeric/hyphen/underscore characters.
+	 *
+	 * @param string $key Input key.
+	 * @return string
+	 */
+	function sanitize_key( $key ) {
+		$key = strtolower( (string) $key );
+		return preg_replace( '/[^a-z0-9_\-]/', '', $key );
+	}
+}
+
+if ( ! function_exists( 'get_current_user_id' ) ) {
+	/**
+	 * Stub: always returns 0 (no logged-in user in unit tests).
+	 *
+	 * @return int
+	 */
+	function get_current_user_id() {
+		return 0;
+	}
+}
+
+if ( ! defined( 'DAY_IN_SECONDS' ) ) {
+	define( 'DAY_IN_SECONDS', 86400 );
+}
+
+if ( ! function_exists( 'add_query_arg' ) ) {
+	/**
+	 * Stub: appends a single key=value pair to a URL.
+	 *
+	 * @param string $key   Query parameter key.
+	 * @param string $value Query parameter value.
+	 * @param string $url   Base URL.
+	 * @return string
+	 */
+	function add_query_arg( $key, $value, $url ) {
+		$sep = ( false === strpos( $url, '?' ) ) ? '?' : '&';
+		return $url . $sep . urlencode( $key ) . '=' . urlencode( $value );
+	}
+}
+
+if ( ! function_exists( 'home_url' ) ) {
+	/**
+	 * Stub: returns the base URL with an optional path suffix.
+	 *
+	 * @param string $path Optional path to append.
+	 * @return string
+	 */
+	function home_url( $path = '/' ) {
+		return 'http://localhost' . $path;
+	}
+}
+
+if ( ! class_exists( 'WP_REST_Response' ) ) {
+	/**
+	 * Minimal WP_REST_Response stub.
+	 */
+	class WP_REST_Response {
+		/** @var mixed Response data. */
+		public $data;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param mixed $data Response data.
+		 */
+		public function __construct( $data = null ) {
+			$this->data = $data;
+		}
+
+		/**
+		 * Return the response data.
+		 *
+		 * @return mixed
+		 */
+		public function get_data() {
+			return $this->data;
+		}
+	}
+}
+
+if ( ! function_exists( 'rest_ensure_response' ) ) {
+	/**
+	 * Stub: wraps data in a WP_REST_Response if not already one.
+	 *
+	 * @param mixed $response Response data or existing WP_REST_Response.
+	 * @return WP_REST_Response
+	 */
+	function rest_ensure_response( $response ) {
+		if ( $response instanceof WP_REST_Response ) {
+			return $response;
+		}
+		return new WP_REST_Response( $response );
+	}
+}
+
+if ( ! class_exists( 'WP_REST_Request' ) ) {
+	/**
+	 * Minimal WP_REST_Request stub.
+	 *
+	 * Supports get_param() and get_header() for unit testing REST handlers
+	 * without a live WordPress REST infrastructure.
+	 */
+	class WP_REST_Request {
+		/** @var array Request parameters (merged body + query for unit tests). */
+		protected $params = array();
+
+		/** @var array Request headers. */
+		protected $headers = array();
+
+		/**
+		 * Retrieve a request parameter by key.
+		 *
+		 * @param string $key Parameter name.
+		 * @return mixed|null
+		 */
+		public function get_param( $key ) {
+			return isset( $this->params[ $key ] ) ? $this->params[ $key ] : null;
+		}
+
+		/**
+		 * Set a request parameter (test helper).
+		 *
+		 * @param string $key   Parameter name.
+		 * @param mixed  $value Parameter value.
+		 * @return void
+		 */
+		public function set_param( $key, $value ) {
+			$this->params[ $key ] = $value;
+		}
+
+		/**
+		 * Retrieve a request header value.
+		 *
+		 * @param string $name Header name.
+		 * @return string|null
+		 */
+		public function get_header( $name ) {
+			return isset( $this->headers[ $name ] ) ? $this->headers[ $name ] : null;
+		}
+
+		/**
+		 * Set a request header (test helper).
+		 *
+		 * @param string $name  Header name.
+		 * @param string $value Header value.
+		 * @return void
+		 */
+		public function set_header( $name, $value ) {
+			$this->headers[ $name ] = $value;
+		}
+	}
+}
+
 // ------------------------------------------------------------------
 // Load the plugin's include files for unit testing.
 // (Integration tests load everything via the WordPress bootstrap.)
@@ -428,3 +584,6 @@ require_once CARTSHARE_PATH . 'includes/class-cartshare-db.php';
 require_once CARTSHARE_PATH . 'includes/class-cartshare-cart.php';
 require_once CARTSHARE_PATH . 'includes/class-cartshare-activator.php';
 require_once CARTSHARE_PATH . 'includes/class-cartshare-deactivator.php';
+if ( file_exists( CARTSHARE_PATH . 'includes/class-cartshare-rest.php' ) ) {
+	require_once CARTSHARE_PATH . 'includes/class-cartshare-rest.php';
+}
