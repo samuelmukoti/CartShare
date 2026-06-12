@@ -546,6 +546,21 @@
 			emailCancel.addEventListener( 'click', hideEmailForm );
 		}
 
+		// Analytics: dispatch a custom event for each channel button click.
+		var allChannelBtns = popup.querySelectorAll( '[data-channel]' );
+		Array.prototype.forEach.call( allChannelBtns, function ( el ) {
+			el.addEventListener( 'click', function () {
+				var slug = el.getAttribute( 'data-channel' );
+				document.dispatchEvent( new CustomEvent( 'cartshare:channel_click', {
+					bubbles: true,
+					detail: {
+						channel:  slug,
+						shareUrl: currentShareUrl || null,
+					},
+				} ) );
+			} );
+		} );
+
 		// Trigger buttons outside the popup (e.g. the classic-cart button).
 		document.addEventListener( 'click', function ( e ) {
 			if ( e.target && e.target.classList.contains( 'cartshare-open' ) ) {
