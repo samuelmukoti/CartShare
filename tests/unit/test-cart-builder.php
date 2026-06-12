@@ -36,11 +36,11 @@ class Test_CartShare_Cart_Builder extends TestCase {
 	}
 
 	/**
-	 * ajax_search_products() must send a 403 JSON error when the user lacks
-	 * the manage_woocommerce capability.
+	 * Verifies ajax_search_products() sends a 403 JSON error when the user
+	 * lacks the manage_woocommerce capability.
 	 *
-	 * wp_send_json_error() throws CartShare_Test_Json_Die in unit tests (to
-	 * simulate the wp_die() call WordPress makes after sending the response).
+	 * The wp_send_json_error() stub throws CartShare_Test_Json_Die to
+	 * simulate the wp_die() call WordPress makes after sending the response.
 	 */
 	public function test_cart_builder_capability_check() {
 		CartShare_Test_State::$user_can = false;
@@ -48,8 +48,7 @@ class Test_CartShare_Cart_Builder extends TestCase {
 		$builder = new CartShare_Cart_Builder();
 		try {
 			$builder->ajax_search_products();
-		} catch ( CartShare_Test_Json_Die $e ) {
-			// Expected: wp_send_json_error() terminates execution via this stub.
+		} catch ( CartShare_Test_Json_Die $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch -- Expected; stub throws to simulate wp_die().
 		}
 
 		$this->assertCount( 1, CartShare_Test_State::$json_error_calls );
@@ -57,8 +56,8 @@ class Test_CartShare_Cart_Builder extends TestCase {
 	}
 
 	/**
-	 * enqueue_assets() must skip enqueueing when the hook suffix does not
-	 * belong to the CartShare cart builder page.
+	 * Checks that enqueue_assets() skips enqueueing when the hook suffix does
+	 * not belong to the CartShare cart builder page.
 	 */
 	public function test_enqueue_assets_skips_wrong_page() {
 		$builder = new CartShare_Cart_Builder();
@@ -66,5 +65,22 @@ class Test_CartShare_Cart_Builder extends TestCase {
 
 		$this->assertNotContains( 'cartshare-cart-builder', CartShare_Test_State::$enqueued_scripts );
 		$this->assertNotContains( 'cartshare-cart-builder', CartShare_Test_State::$enqueued_styles );
+	}
+
+	/**
+	 * Verifies ajax_search_customers() sends a 403 JSON error when the user
+	 * lacks the manage_woocommerce capability.
+	 */
+	public function test_customer_search_capability_check() {
+		CartShare_Test_State::$user_can = false;
+
+		$builder = new CartShare_Cart_Builder();
+		try {
+			$builder->ajax_search_customers();
+		} catch ( CartShare_Test_Json_Die $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch -- Expected; stub throws to simulate wp_die().
+		}
+
+		$this->assertCount( 1, CartShare_Test_State::$json_error_calls );
+		$this->assertSame( 403, CartShare_Test_State::$json_error_calls[0]['status'] );
 	}
 }

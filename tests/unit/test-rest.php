@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable WordPress.Files.FileName.InvalidClassFileName,WordPress.Files.FileName.NotHyphenatedLowercase -- Test file defines multiple stub classes; filename follows PHPUnit conventions.
 /**
  * Unit tests for CartShare_REST::save().
  *
@@ -18,18 +19,35 @@ use PHPUnit\Framework\TestCase;
  * Extends CartShare_DB to satisfy the type hint on CartShare_REST::__construct().
  * All other CartShare_DB methods are inherited but never called in these tests.
  */
+// phpcs:ignore WordPress.Files.OneObjectStructurePerFile.MultipleFound -- PHPUnit stub class.
 class Stub_CartShare_DB_REST extends CartShare_DB {
 
-	/** @var array|null Cart data from the last insert() call. */
+	/**
+	 * Cart data from the last insert() call.
+	 *
+	 * @var array|null
+	 */
 	public $last_cart_data = null;
 
-	/** @var string|null Source from the last insert() call. */
+	/**
+	 * Source tag from the last insert() call.
+	 *
+	 * @var string|null
+	 */
 	public $last_source = null;
 
-	/** @var int|null User ID from the last insert() call. */
+	/**
+	 * User ID from the last insert() call.
+	 *
+	 * @var int|null
+	 */
 	public $last_user_id = null;
 
-	/** @var string Fixed token returned by insert(). */
+	/**
+	 * Fixed token returned by insert().
+	 *
+	 * @var string
+	 */
 	public $token = 'aabbccdd11223344aabbccdd11223344';
 
 	/**
@@ -56,12 +74,21 @@ class Stub_CartShare_DB_REST extends CartShare_DB {
  *
  * Tests CartShare_REST::save() for the admin cart-builder explicit-items path.
  */
+// phpcs:ignore WordPress.Files.OneObjectStructurePerFile.MultipleFound -- Multiple classes are intentional in PHPUnit test files.
 class Test_CartShare_REST_Save extends TestCase {
 
-	/** @var Stub_CartShare_DB_REST */
+	/**
+	 * DB stub used by the REST handler under test.
+	 *
+	 * @var Stub_CartShare_DB_REST
+	 */
 	protected $stub_db;
 
-	/** @var CartShare_REST */
+	/**
+	 * REST handler instance under test.
+	 *
+	 * @var CartShare_REST
+	 */
 	protected $rest;
 
 	/**
@@ -171,8 +198,8 @@ class Test_CartShare_REST_Save extends TestCase {
 	}
 
 	/**
-	 * sanitize_items() (exercised via save()) must discard entries that have no
-	 * product_id and must clamp quantity to a minimum of 1.
+	 * Verifies sanitize_items() (exercised via save()) discards entries with no
+	 * product_id and clamps quantity to a minimum of 1.
 	 */
 	public function test_sanitize_items_strips_invalid() {
 		$items = array(

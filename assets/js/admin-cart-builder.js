@@ -47,7 +47,7 @@
 	 */
 	function initProductSearch() {
 		var $input   = $( '#cartshare-product-search' );
-		var $results = $( '#cartshare-product-results' );
+		var $results = $( '#cartshare-search-results' );
 
 		if ( ! $input.length ) {
 			return;
@@ -98,7 +98,7 @@
 
 		// Hide results when clicking outside.
 		$( document ).on( 'click', function ( e ) {
-			if ( ! $( e.target ).closest( '#cartshare-product-search, #cartshare-product-results' ).length ) {
+			if ( ! $( e.target ).closest( '#cartshare-product-search, #cartshare-search-results' ).length ) {
 				$results.empty();
 			}
 		} );
@@ -125,8 +125,8 @@
 		var $row = $(
 			'<tr data-product-id="' + product.id + '">' +
 				'<td class="cartshare-product-name">' + $( '<span>' ).text( product.name ).html() + '</td>' +
-				'<td><input type="number" class="cartshare-qty" value="1" min="1"></td>' +
 				'<td><div class="cartshare-variation-container"></div></td>' +
+				'<td><input type="number" class="cartshare-qty" value="1" min="1"></td>' +
 				'<td><button type="button" class="button cartshare-remove-item">' + ( data.removeLabel || 'Remove' ) + '</button></td>' +
 			'</tr>'
 		);
@@ -177,7 +177,7 @@
 				$.each( response.data, function ( i, variation ) {
 					$select.append(
 						$( '<option>' )
-							.val( variation.id )
+							.val( variation.variation_id )
 							.attr( 'data-attrs', JSON.stringify( variation.attributes ) )
 							.text( variation.name )
 					);
@@ -373,7 +373,7 @@
 				headers:     { 'X-WP-Nonce': data.restNonce },
 				data:        JSON.stringify( payload ),
 				success:     function ( response ) {
-					var url = response && response.url ? response.url : '';
+					var url = response && response.share_url ? response.share_url : '';
 					if ( url ) {
 						$( '#cartshare-share-url' ).val( url );
 						$( '#cartshare-link-container' ).show();

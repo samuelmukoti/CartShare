@@ -86,6 +86,7 @@ if ( ! current_user_can( 'manage_woocommerce' ) ) {
 		<button id="cartshare-generate-btn" class="button button-primary">
 			<?php esc_html_e( 'Generate Cart Link', 'cartshare' ); ?>
 		</button>
+		<div class="cartshare-inline-error" style="display:none;"></div>
 	</div>
 
 	<!-- ======================================================
@@ -101,7 +102,7 @@ if ( ! current_user_can( 'manage_woocommerce' ) ) {
 				readonly
 				value=""
 			>
-			<button class="cartshare-copy-link button">
+			<button id="cartshare-copy-link-btn" class="cartshare-copy-link button">
 				<?php esc_html_e( 'Copy Link', 'cartshare' ); ?>
 			</button>
 		</div>

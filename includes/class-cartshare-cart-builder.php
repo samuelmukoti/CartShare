@@ -32,6 +32,7 @@ class CartShare_Cart_Builder {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 		add_action( 'wp_ajax_cartshare_search_products', array( $this, 'ajax_search_products' ) );
 		add_action( 'wp_ajax_cartshare_get_variations', array( $this, 'ajax_get_variations' ) );
+		add_action( 'wp_ajax_cartshare_search_customers', array( $this, 'ajax_search_customers' ) );
 	}
 
 	/**
@@ -64,14 +65,14 @@ class CartShare_Cart_Builder {
 
 		wp_enqueue_style(
 			'cartshare-cart-builder',
-			CARTSHARE_URL . 'assets/css/cart-builder.css',
+			CARTSHARE_URL . 'assets/css/admin-cart-builder.css',
 			array(),
 			CARTSHARE_VERSION
 		);
 
 		wp_enqueue_script(
 			'cartshare-cart-builder',
-			CARTSHARE_URL . 'assets/js/cart-builder.js',
+			CARTSHARE_URL . 'assets/js/admin-cart-builder.js',
 			array( 'jquery' ),
 			CARTSHARE_VERSION,
 			true
@@ -143,8 +144,8 @@ class CartShare_Cart_Builder {
 
 		$results = array();
 		foreach ( $all as $product ) {
-			$image_id    = $product->get_image_id();
-			$thumb_url   = $image_id ? wp_get_attachment_image_url( $image_id, 'thumbnail' ) : false;
+			$image_id  = $product->get_image_id();
+			$thumb_url = $image_id ? wp_get_attachment_image_url( $image_id, 'thumbnail' ) : false;
 			$results[] = array(
 				'id'          => $product->get_id(),
 				'name'        => $product->get_name(),
@@ -194,6 +195,45 @@ class CartShare_Cart_Builder {
 			},
 			$variations
 		);
+
+		wp_send_json_success( $results );
+	}
+
+	/**
+	 * Search registered customers by name, email, or login via AJAX.
+	 *
+	 * @return void
+	 */
+	public function ajax_search_customers(): void {
+		check_ajax_referer( 'cartshare_cart_builder', 'nonce' );
+
+		// phpcs:ignore WordPress.WP.Capabilities.Unknown -- WooCommerce registers manage_woocommerce.
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Unauthorized.', 'cartshare' ) ), 403 );
+		}
+
+		$term = isset( $_GET['term'] ) ? sanitize_text_field( wp_unslash( $_GET['term'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce verified above via check_ajax_referer.
+		if ( strlen( $term ) < 2 ) {
+			wp_send_json_success( array() );
+		}
+
+		$users = get_users(
+			array(
+				'search'         => '*' . $term . '*',
+				'search_columns' => array( 'user_login', 'user_email', 'display_name' ),
+				'number'         => 20,
+				'fields'         => array( 'ID', 'display_name', 'user_email' ),
+			)
+		);
+
+		$results = array();
+		foreach ( $users as $user ) {
+			$results[] = array(
+				'id'    => (int) $user->ID,
+				'name'  => $user->display_name,
+				'email' => $user->user_email,
+			);
+		}
 
 		wp_send_json_success( $results );
 	}
