@@ -183,8 +183,10 @@ class CartShare_Cart_Builder {
 		$variations = $product->get_available_variations();
 		$results    = array_map(
 			function ( $v ) {
+				$attr_label = implode( ' / ', array_filter( array_values( $v['attributes'] ) ) );
 				return array(
 					'variation_id' => $v['variation_id'],
+					'name'         => $attr_label ? $attr_label : ( $v['sku'] ? $v['sku'] : '#' . $v['variation_id'] ),
 					'attributes'   => $v['attributes'],
 					'sku'          => $v['sku'],
 					'price'        => $v['display_price'],

@@ -206,8 +206,15 @@ class CartShare_REST {
 		$source = sanitize_key( (string) ( $request->get_param( 'source' ) ?? '' ) );
 		$source = '' !== $source ? $source : null;
 
-		$user_id  = get_current_user_id() ?: null;
-		$guest_id = ( ! $user_id && WC()->session ) ? WC()->session->get_customer_id() : null;
+		// Resolve user_id: admin may supply customer_id to associate cart with a specific customer.
+		$customer_id_param = absint( $request->get_param( 'customer_id' ) ?? 0 );
+		if ( $customer_id_param > 0 && current_user_can( 'manage_woocommerce' ) ) {
+			$user_id  = $customer_id_param;
+			$guest_id = null;
+		} else {
+			$user_id  = get_current_user_id() ?: null;
+			$guest_id = ( ! $user_id && WC()->session ) ? WC()->session->get_customer_id() : null;
+		}
 
 		$ttl_days    = absint( get_option( 'cartshare_expiry_days', 30 ) );
 		$ttl_seconds = $ttl_days > 0 ? $ttl_days * DAY_IN_SECONDS : null;

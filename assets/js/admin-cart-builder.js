@@ -175,6 +175,9 @@
 					.append( $( '<option value="">' ).text( data.selectVariationLabel || '— Select variation —' ) );
 
 				$.each( response.data, function ( i, variation ) {
+					if ( ! variation.available ) {
+						return;
+					}
 					$select.append(
 						$( '<option>' )
 							.val( variation.variation_id )
@@ -182,6 +185,11 @@
 							.text( variation.name )
 					);
 				} );
+
+				if ( $select.find( 'option' ).length <= 1 ) {
+					$container.html( '<span class="cartshare-error">' + ( data.noVariationsLabel || 'No available variations.' ) + '</span>' );
+					return;
+				}
 
 				$select.on( 'change', function () {
 					var $option = $select.find( 'option:selected' );
