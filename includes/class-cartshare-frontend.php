@@ -317,7 +317,8 @@ class CartShare_Frontend {
 				'emailSend'    => esc_html__( 'Send', 'cartshare' ),
 			),
 			'colors'      => $this->get_color_vars(),
-			'buttonLabel' => esc_html( get_option( 'cartshare_button_label', __( 'Save & Share Cart', 'cartshare' ) ) ),
+			'buttonLabel'  => esc_html( get_option( 'cartshare_button_label', __( 'Save & Share Cart', 'cartshare' ) ) ),
+			'shareMessage' => esc_html( get_option( 'cartshare_share_message', '' ) ),
 		);
 	}
 
