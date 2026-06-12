@@ -264,12 +264,15 @@
 	 * @return {Object}
 	 */
 	function getIntentUrls( url ) {
-		var encoded = encodeURIComponent( url );
+		var encoded  = encodeURIComponent( url );
+		var message  = ( data.shareMessage ) ? data.shareMessage + ' ' : '';
+		var waText   = encodeURIComponent( message + url );
+		var twText   = encodeURIComponent( message.trim() );
 		return {
 			facebook:  'https://www.facebook.com/sharer/sharer.php?u=' + encoded,
 			messenger: 'https://www.facebook.com/dialog/send?link=' + encoded + '&app_id=291494419107518&redirect_uri=' + encoded,
-			whatsapp:  'https://api.whatsapp.com/send?text=' + encoded,
-			twitter:   'https://twitter.com/intent/tweet?url=' + encoded,
+			whatsapp:  'https://wa.me/?text=' + waText,
+			twitter:   'https://twitter.com/intent/tweet?url=' + encoded + ( twText ? '&text=' + twText : '' ),
 			linkedin:  'https://www.linkedin.com/sharing/share-offsite/?url=' + encoded,
 			skype:     'https://web.skype.com/share?url=' + encoded,
 		};
