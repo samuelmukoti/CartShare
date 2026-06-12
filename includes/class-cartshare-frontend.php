@@ -111,8 +111,8 @@ class CartShare_Frontend {
 		if ( ! preg_match( '/^[A-Za-z0-9]{32}$/', $token ) ) {
 			$cart_row = null;
 		} else {
-			$db       = new CartShare_DB();
-			$row      = $db->find_by_token( $token );
+			$db  = new CartShare_DB();
+			$row = $db->find_by_token( $token );
 
 			// Treat expired rows as not found.
 			if (
@@ -288,11 +288,11 @@ class CartShare_Frontend {
 	 */
 	private function get_script_data(): array {
 		return array(
-			'restUrl'     => rest_url( 'cartshare/v1' ),
-			'siteUrl'     => esc_url( home_url( '/' ) ),
-			'nonce'       => wp_create_nonce( 'wp_rest' ),
-			'channels'    => $this->get_enabled_channels(),
-			'labels'      => array(
+			'restUrl'      => rest_url( 'cartshare/v1' ),
+			'siteUrl'      => esc_url( home_url( '/' ) ),
+			'nonce'        => wp_create_nonce( 'wp_rest' ),
+			'channels'     => $this->get_enabled_channels(),
+			'labels'       => array(
 				'save'         => esc_html__( 'Save & Share Cart', 'cartshare' ),
 				'saving'       => esc_html__( 'Saving…', 'cartshare' ),
 				'copyLink'     => esc_html__( 'Copy Link', 'cartshare' ),
@@ -316,7 +316,7 @@ class CartShare_Frontend {
 				'emailMsg'     => esc_html__( 'Message (optional)', 'cartshare' ),
 				'emailSend'    => esc_html__( 'Send', 'cartshare' ),
 			),
-			'colors'      => $this->get_color_vars(),
+			'colors'       => $this->get_color_vars(),
 			'buttonLabel'  => esc_html( get_option( 'cartshare_button_label', __( 'Save & Share Cart', 'cartshare' ) ) ),
 			'shareMessage' => esc_html( get_option( 'cartshare_share_message', '' ) ),
 		);
@@ -353,9 +353,9 @@ class CartShare_Frontend {
 		$button_text = sanitize_hex_color( get_option( 'cartshare_color_button_text', '#ffffff' ) );
 
 		return array(
-			'primary'    => $primary ?: '#4f46e5',
-			'buttonBg'   => $button_bg ?: '#4f46e5',
-			'buttonText' => $button_text ?: '#ffffff',
+			'primary'    => $primary ? $primary : '#4f46e5',
+			'buttonBg'   => $button_bg ? $button_bg : '#4f46e5',
+			'buttonText' => $button_text ? $button_text : '#ffffff',
 		);
 	}
 

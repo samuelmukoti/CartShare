@@ -25,7 +25,7 @@ class Test_CartShare_Sharing_Settings extends TestCase {
 	}
 
 	/**
-	 * update_option / get_option round-trip must persist the share message.
+	 * Option round-trip must persist the share message.
 	 *
 	 * @return void
 	 */
@@ -37,7 +37,7 @@ class Test_CartShare_Sharing_Settings extends TestCase {
 	/**
 	 * WhatsApp channel must be enabled by default when no option has been saved.
 	 *
-	 * get_option returns the supplied default ('1') when the key is absent,
+	 * The get_option call returns the supplied default ('1') when the key is absent,
 	 * which the frontend interprets as "enabled".
 	 *
 	 * @return void
@@ -47,8 +47,10 @@ class Test_CartShare_Sharing_Settings extends TestCase {
 	}
 
 	/**
-	 * sanitize_text_field must strip script tags; the sanitized value must
-	 * survive an update_option / get_option round-trip without script tags.
+	 * Sanitization must strip script tags from the share message value.
+	 *
+	 * The sanitized value must survive an update_option / get_option
+	 * round-trip without script tags.
 	 *
 	 * @return void
 	 */
