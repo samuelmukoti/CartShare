@@ -23,9 +23,9 @@ services:
       WORDPRESS_DB_NAME: wordpress
       WORDPRESS_DEBUG: "1"
     volumes:
-      # Persist /var/www/html so wp-config.php, themes, uploads survive
-      # `docker compose down` (use `-v` to wipe).
-      - wp_data:/var/www/html
+      # Persist user uploads only. Do not mount over /var/www/html because
+      # that can hide the plugin files baked into the image by Dockerfile.
+      - wp_uploads:/var/www/html/wp-content/uploads
       # The plugin is baked into the image by the Dockerfile (build: .),
       # not bind-mounted — preview infrastructure disallows host paths.
       # Local edits require a rebuild: `docker compose up -d --build`.
@@ -50,5 +50,5 @@ services:
       retries: 20
 
 volumes:
-  wp_data:
+  wp_uploads:
   db_data:
