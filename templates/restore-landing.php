@@ -118,6 +118,7 @@ $site_name = get_bloginfo( 'name' );
 			button.button { width: 100%; }
 		}
 	</style>
+	<?php wp_head(); ?>
 </head>
 <body>
 
@@ -209,5 +210,6 @@ $site_name = get_bloginfo( 'name' );
 </div><!-- /.cartshare-restore-landing -->
 </main>
 
+<?php wp_footer(); ?>
 </body>
 </html>
