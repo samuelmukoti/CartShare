@@ -128,6 +128,11 @@ class CartShare_Plugin {
 			require_once CARTSHARE_PATH . 'includes/class-cartshare-admin.php';
 		}
 
+		// Phase 8 — Admin cart builder.
+		if ( file_exists( CARTSHARE_PATH . 'includes/class-cartshare-cart-builder.php' ) ) {
+			require_once CARTSHARE_PATH . 'includes/class-cartshare-cart-builder.php';
+		}
+
 		// Phase 7 — Email sender.
 		if ( file_exists( CARTSHARE_PATH . 'includes/class-cartshare-email.php' ) ) {
 			require_once CARTSHARE_PATH . 'includes/class-cartshare-email.php';
@@ -175,6 +180,11 @@ class CartShare_Plugin {
 		// Phase 6 — Admin settings page.
 		if ( class_exists( 'CartShare_Admin' ) ) {
 			( new CartShare_Admin() )->init_hooks();
+		}
+
+		// Phase 8 — Admin cart builder.
+		if ( class_exists( 'CartShare_Cart_Builder' ) ) {
+			( new CartShare_Cart_Builder() )->init_hooks();
 		}
 
 		// Phase 7 — Email sender: no hooks of its own; loaded by load_dependencies()

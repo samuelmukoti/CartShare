@@ -166,32 +166,55 @@ class CartShare_REST {
 	/**
 	 * Handle POST /save — serialize the current cart and persist it.
 	 *
-	 * Rejects the request with 400 when the cart is empty (no DB row created).
+	 * When an explicit `items` array is provided (admin cart-builder path), the
+	 * cart session is bypassed entirely and `sanitize_items()` is used to build
+	 * the payload.  Otherwise the existing WC()->cart serialization path runs.
+	 *
 	 * On success returns the opaque token and the shareable restore URL.
 	 *
 	 * @param WP_REST_Request $request The incoming REST request.
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function save( WP_REST_Request $request ) {
-		// In REST / admin contexts the cart session may not be initialised yet.
-		if ( null === WC()->cart ) {
-			wc_load_cart();
-		}
-
-		$cart_helper = new CartShare_Cart( $this->db );
-
-		if ( $cart_helper->is_cart_empty() ) {
-			return new WP_Error(
-				'cartshare_empty_cart',
-				__( 'Cannot save an empty cart.', 'cartshare' ),
-				array( 'status' => 400 )
+		// NEW: If an explicit items payload is provided, use it directly.
+		$items_param = $request->get_param( 'items' );
+		if ( is_array( $items_param ) && ! empty( $items_param ) ) {
+			$cart_data = array(
+				'items'   => $this->sanitize_items( $items_param ),
+				'coupons' => array(),
 			);
+		} else {
+			// Existing path: serialize from WC()->cart.
+			// In REST / admin contexts the cart session may not be initialised yet.
+			if ( null === WC()->cart ) {
+				wc_load_cart();
+			}
+
+			$cart_helper = new CartShare_Cart( $this->db );
+
+			if ( $cart_helper->is_cart_empty() ) {
+				return new WP_Error(
+					'cartshare_empty_cart',
+					__( 'Cannot save an empty cart.', 'cartshare' ),
+					array( 'status' => 400 )
+				);
+			}
+
+			$cart_data = $cart_helper->serialize_current_cart();
 		}
 
-		$cart_data = $cart_helper->serialize_current_cart();
+		$source = sanitize_key( (string) ( $request->get_param( 'source' ) ?? '' ) );
+		$source = '' !== $source ? $source : null;
 
-		$user_id  = get_current_user_id() ?: null;
-		$guest_id = ( ! $user_id && WC()->session ) ? WC()->session->get_customer_id() : null;
+		// Resolve user_id: admin may supply customer_id to associate cart with a specific customer.
+		$customer_id_param = absint( $request->get_param( 'customer_id' ) ?? 0 );
+		if ( $customer_id_param > 0 && current_user_can( 'manage_woocommerce' ) ) {
+			$user_id  = $customer_id_param;
+			$guest_id = null;
+		} else {
+			$user_id  = get_current_user_id() ?: null;
+			$guest_id = ( ! $user_id && WC()->session ) ? WC()->session->get_customer_id() : null;
+		}
 
 		$ttl_days    = absint( get_option( 'cartshare_expiry_days', 30 ) );
 		$ttl_seconds = $ttl_days > 0 ? $ttl_days * DAY_IN_SECONDS : null;
@@ -199,7 +222,7 @@ class CartShare_REST {
 		$name = sanitize_text_field( (string) ( $request->get_param( 'name' ) ?? '' ) );
 		$name = '' !== $name ? $name : null;
 
-		$token = $this->db->insert( $cart_data, $user_id, $guest_id, $ttl_seconds, $name );
+		$token = $this->db->insert( $cart_data, $user_id, $guest_id, $ttl_seconds, $name, $source );
 
 		if ( is_wp_error( $token ) ) {
 			return $token;
@@ -211,6 +234,34 @@ class CartShare_REST {
 				'share_url' => add_query_arg( 'cartshare_restore', $token, home_url( '/' ) ),
 			)
 		);
+	}
+
+	/**
+	 * Sanitize a raw items array from an admin REST payload.
+	 *
+	 * Filters out items with no product_id, clamps quantity to a minimum of 1,
+	 * uses absint() for all IDs, and sanitizes variation attribute values.
+	 *
+	 * @param array $items Raw items array from the REST request.
+	 * @return array Sanitized items array ready for storage.
+	 */
+	private function sanitize_items( array $items ): array {
+		$clean = array();
+		foreach ( $items as $item ) {
+			if ( empty( $item['product_id'] ) ) {
+				continue;
+			}
+			$clean[] = array(
+				'product_id'     => absint( $item['product_id'] ),
+				'variation_id'   => absint( $item['variation_id'] ?? 0 ),
+				'quantity'       => max( 1, absint( $item['quantity'] ?? 1 ) ),
+				'variation'      => isset( $item['variation'] ) && is_array( $item['variation'] )
+					? array_map( 'sanitize_text_field', $item['variation'] )
+					: array(),
+				'cart_item_data' => array(),
+			);
+		}
+		return $clean;
 	}
 
 	/**

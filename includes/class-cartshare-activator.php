@@ -25,7 +25,7 @@ class CartShare_Activator {
 	 * Bump this constant whenever the table structure changes so that
 	 * existing installs know to run dbDelta() again on upgrade.
 	 */
-	const DB_VERSION = '1.0.0';
+	const DB_VERSION = '1.1.0';
 
 	/**
 	 * Run all activation tasks.
@@ -76,6 +76,7 @@ class CartShare_Activator {
   user_id BIGINT UNSIGNED NULL DEFAULT NULL,
   guest_id VARCHAR(255) NULL DEFAULT NULL,
   name VARCHAR(255) NULL DEFAULT NULL,
+  source VARCHAR(50) NULL DEFAULT NULL,
   cart_data LONGTEXT NOT NULL,
   created_at DATETIME NOT NULL,
   expires_at DATETIME NULL DEFAULT NULL,

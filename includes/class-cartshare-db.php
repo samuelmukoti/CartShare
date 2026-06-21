@@ -40,10 +40,11 @@ class CartShare_DB {
 	 * @param string|null $guest_id    WooCommerce session customer ID, or null for logged-in users.
 	 * @param int|null    $ttl_seconds Time-to-live in seconds; null means no expiry.
 	 * @param string|null $name        Optional human-readable cart name.
+	 * @param string|null $source      Optional source identifier (e.g. 'admin').
 	 *
 	 * @return string|\WP_Error The 32-character token on success, or WP_Error on failure.
 	 */
-	public function insert( array $cart_data, ?int $user_id, ?string $guest_id, ?int $ttl_seconds, ?string $name ) {
+	public function insert( array $cart_data, ?int $user_id, ?string $guest_id, ?int $ttl_seconds, ?string $name, ?string $source = null ) {
 		global $wpdb;
 
 		$token = CartShare_Token::generate();
@@ -58,12 +59,13 @@ class CartShare_DB {
 			'user_id'    => $user_id ?: null,
 			'guest_id'   => $guest_id ?: null,
 			'name'       => $name ? sanitize_text_field( $name ) : null,
+			'source'     => $source ? sanitize_key( $source ) : null,
 			'cart_data'  => wp_json_encode( $cart_data ),
 			'created_at' => current_time( 'mysql', true ),
 			'expires_at' => $expires_at,
 		);
 
-		$format = array( '%s', '%d', '%s', '%s', '%s', '%s', '%s' );
+		$format = array( '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s' );
 
 		$result = $wpdb->insert( $this->table(), $data, $format );
 
