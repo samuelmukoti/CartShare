@@ -264,12 +264,15 @@
 	 * @return {Object}
 	 */
 	function getIntentUrls( url ) {
-		var encoded = encodeURIComponent( url );
+		var encoded  = encodeURIComponent( url );
+		var message  = ( data.shareMessage ) ? data.shareMessage + ' ' : '';
+		var waText   = encodeURIComponent( message + url );
+		var twText   = encodeURIComponent( message.trim() );
 		return {
 			facebook:  'https://www.facebook.com/sharer/sharer.php?u=' + encoded,
 			messenger: 'https://www.facebook.com/dialog/send?link=' + encoded + '&app_id=291494419107518&redirect_uri=' + encoded,
-			whatsapp:  'https://api.whatsapp.com/send?text=' + encoded,
-			twitter:   'https://twitter.com/intent/tweet?url=' + encoded,
+			whatsapp:  'https://wa.me/?text=' + waText,
+			twitter:   'https://twitter.com/intent/tweet?url=' + encoded + ( twText ? '&text=' + twText : '' ),
 			linkedin:  'https://www.linkedin.com/sharing/share-offsite/?url=' + encoded,
 			skype:     'https://web.skype.com/share?url=' + encoded,
 		};
@@ -542,6 +545,21 @@
 		if ( emailCancel ) {
 			emailCancel.addEventListener( 'click', hideEmailForm );
 		}
+
+		// Analytics: dispatch a custom event for each channel button click.
+		var allChannelBtns = popup.querySelectorAll( '[data-channel]' );
+		Array.prototype.forEach.call( allChannelBtns, function ( el ) {
+			el.addEventListener( 'click', function () {
+				var slug = el.getAttribute( 'data-channel' );
+				document.dispatchEvent( new CustomEvent( 'cartshare:channel_click', {
+					bubbles: true,
+					detail: {
+						channel:  slug,
+						shareUrl: currentShareUrl || null,
+					},
+				} ) );
+			} );
+		} );
 
 		// Trigger buttons outside the popup (e.g. the classic-cart button).
 		document.addEventListener( 'click', function ( e ) {
