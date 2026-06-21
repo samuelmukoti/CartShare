@@ -1,0 +1,23 @@
+# Keep the docker build context lean — these don't need to ship into
+# the WordPress image. The Dockerfile + the plugin source itself are
+# what end up inside /var/www/html/wp-content/plugins/<slug>/.
+
+.git/
+.github/
+node_modules/
+vendor/
+.devstation/
+.devstation-status
+.devstation-security.json
+.claude_settings.json
+CLAUDE.md
+AGENTS.md
+README.md
+PRD.md
+.pre-commit-config.yaml
+phpunit.xml*
+tests/
+.gitignore
+docker-compose.yml
+Dockerfile
+.dockerignore

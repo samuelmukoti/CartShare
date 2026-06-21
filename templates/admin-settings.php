@@ -361,6 +361,20 @@ $setup_label  = $setup_status['onboarding_complete'] ? esc_html__( 'Complete', '
 		<input type="hidden" name="cartshare_tab" value="sharing">
 
 		<table class="form-table" role="presentation">
+			<tr>
+				<th scope="row">
+					<label for="cartshare_share_message"><?php esc_html_e( 'Share Message Text', 'cartshare' ); ?></label>
+				</th>
+				<td>
+					<input type="text" name="cartshare_share_message" id="cartshare_share_message"
+							value="<?php echo esc_attr( get_option( 'cartshare_share_message', '' ) ); ?>"
+							class="regular-text">
+					<p class="description"><?php esc_html_e( 'Optional message prepended to WhatsApp and X / Twitter shares. Leave blank to share the cart URL only.', 'cartshare' ); ?></p>
+				</td>
+			</tr>
+		</table>
+
+		<table class="form-table" role="presentation">
 			<?php foreach ( $channels as $slug => $label ) : ?>
 			<tr>
 				<th scope="row"><?php echo esc_html( $label ); ?></th>

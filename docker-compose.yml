@@ -8,7 +8,7 @@
 
 services:
   wordpress:
-    image: wordpress:latest
+    build: .
     restart: unless-stopped
     ports:
       - "8080:80"
@@ -22,14 +22,26 @@ services:
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
       WORDPRESS_DEBUG: "1"
+      # The preview gateway proxies with http-proxy's changeOrigin, so the
+      # upstream Host header is the internal target (host.docker.internal:<port>)
+      # and WordPress would redirect visitors there. Honor the forwarded host
+      # instead so canonical URLs point at the public preview domain.
+      # ($$ escapes $ from compose interpolation; public previews are HTTPS.)
+      WORDPRESS_CONFIG_EXTRA: |
+        if (!empty($$_SERVER['HTTP_X_FORWARDED_HOST'])) {
+            $$__ds_host = trim(explode(',', $$_SERVER['HTTP_X_FORWARDED_HOST'])[0]);
+            $$_SERVER['HTTP_HOST'] = $$__ds_host;
+            $$_SERVER['HTTPS'] = 'on';
+            if (!defined('WP_HOME'))    define('WP_HOME',    'https://' . $$__ds_host);
+            if (!defined('WP_SITEURL')) define('WP_SITEURL', 'https://' . $$__ds_host);
+        }
     volumes:
       # Persist /var/www/html so wp-config.php, themes, uploads survive
       # `docker compose down` (use `-v` to wipe).
       - wp_data:/var/www/html
-      # Bind the plugin source into wp-content/plugins/<slug>/ — this is
-      # what makes the plugin appear in WordPress and stay in sync with
-      # edits in this repo.
-      - ./:/var/www/html/wp-content/plugins/cartshare/
+      # The plugin is baked into the image by the Dockerfile (build: .),
+      # not bind-mounted — preview infrastructure disallows host paths.
+      # Local edits require a rebuild: `docker compose up -d --build`.
     depends_on:
       db:
         condition: service_healthy
