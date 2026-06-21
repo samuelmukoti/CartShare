@@ -2,9 +2,9 @@ name: CartShare CI
 
 on:
   push:
-    branches: [main]
+    branches: [001-cart-share-analytics-dashboard]
   pull_request:
-    branches: [main]
+    branches: [001-cart-share-analytics-dashboard]
 
 permissions:
   contents: read
