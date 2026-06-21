@@ -113,6 +113,18 @@ if ( ! function_exists( 'sanitize_text_field' ) ) {
     }
 }
 
+if ( ! function_exists( 'wp_unslash' ) ) {
+    /**
+     * Stub: returns the value unchanged (no slash-stripping needed in test context).
+     *
+     * @param mixed $value Value to unslash.
+     * @return mixed
+     */
+    function wp_unslash( $value ) {
+        return $value;
+    }
+}
+
 if ( ! function_exists( 'wp_json_encode' ) ) {
     /**
      * Stub: thin wrapper around json_encode.
@@ -419,6 +431,39 @@ if ( ! function_exists( 'absint' ) ) {
 	}
 }
 
+if ( ! function_exists( 'is_cart' ) ) {
+    /**
+     * Stub: returns false — no cart page in unit test context.
+     *
+     * @return bool
+     */
+    function is_cart() {
+        return false;
+    }
+}
+
+if ( ! function_exists( 'is_checkout' ) ) {
+    /**
+     * Stub: returns false — no checkout page in unit test context.
+     *
+     * @return bool
+     */
+    function is_checkout() {
+        return false;
+    }
+}
+
+if ( ! function_exists( 'is_account_page' ) ) {
+    /**
+     * Stub: returns false — no account page in unit test context.
+     *
+     * @return bool
+     */
+    function is_account_page() {
+        return false;
+    }
+}
+
 // ------------------------------------------------------------------
 // Load the plugin's include files for unit testing.
 // (Integration tests load everything via the WordPress bootstrap.)
@@ -428,3 +473,5 @@ require_once CARTSHARE_PATH . 'includes/class-cartshare-db.php';
 require_once CARTSHARE_PATH . 'includes/class-cartshare-cart.php';
 require_once CARTSHARE_PATH . 'includes/class-cartshare-activator.php';
 require_once CARTSHARE_PATH . 'includes/class-cartshare-deactivator.php';
+require_once CARTSHARE_PATH . 'includes/class-cartshare-admin.php';
+require_once CARTSHARE_PATH . 'includes/class-cartshare-frontend.php';

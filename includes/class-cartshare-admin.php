@@ -384,6 +384,11 @@ class CartShare_Admin {
 			// phpcs:enable WordPress.Security.NonceVerification.Missing
 			update_option( 'cartshare_channel_' . $channel, $enabled );
 		}
+
+		// phpcs:disable WordPress.Security.NonceVerification.Missing
+		$share_message = isset( $_POST['cartshare_share_message'] ) ? sanitize_text_field( wp_unslash( $_POST['cartshare_share_message'] ) ) : '';
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
+		update_option( 'cartshare_share_message', $share_message );
 	}
 
 	/**
