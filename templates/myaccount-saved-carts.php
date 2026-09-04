@@ -38,8 +38,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<tbody>
 				<?php foreach ( $saved_carts as $cart_row ) : ?>
 					<?php
-					$token      = esc_attr( $cart_row['token'] );
-					$cart_name  = ! empty( $cart_row['name'] )
+					$token     = esc_attr( $cart_row['token'] );
+					$cart_name = ! empty( $cart_row['name'] )
 						? $cart_row['name']
 						: __( '(Unnamed)', 'cartshare' );
 

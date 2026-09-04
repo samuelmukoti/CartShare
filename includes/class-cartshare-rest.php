@@ -251,7 +251,7 @@ class CartShare_REST {
 			$user_id  = $customer_id_param;
 			$guest_id = null;
 		} else {
-			$user_id  = get_current_user_id() ?: null;
+			$user_id  = null !== get_current_user_id() ? get_current_user_id() : null;
 			$guest_id = ( ! $user_id && WC()->session ) ? WC()->session->get_customer_id() : null;
 		}
 
@@ -357,7 +357,7 @@ class CartShare_REST {
 		// Log the restore (and stash it on the session for order attribution).
 		$analytics = $this->get_analytics();
 		if ( null !== $analytics ) {
-			$analytics->record_restore( $token, get_current_user_id() ?: null );
+			$analytics->record_restore( $token, ( null === get_current_user_id() ) ? null : get_current_user_id() );
 		}
 
 		// Resolve the post-restore redirect target from admin settings.
@@ -459,7 +459,7 @@ class CartShare_REST {
 				parse_str( $query, $query_args );
 				$token = isset( $query_args['cartshare_restore'] ) ? sanitize_text_field( $query_args['cartshare_restore'] ) : '';
 			}
-			$analytics->record_save( 'email', $token, get_current_user_id() ?: null );
+			$analytics->record_save( 'email', $token, ( null === get_current_user_id() ) ? null : get_current_user_id() );
 		}
 
 		return rest_ensure_response( array( 'sent' => true ) );
@@ -478,7 +478,7 @@ class CartShare_REST {
 	 */
 	public function delete( WP_REST_Request $request ) {
 		$token    = sanitize_text_field( $request->get_param( 'token' ) );
-		$user_id  = get_current_user_id() ?: null;
+		$user_id  = null !== get_current_user_id() ? get_current_user_id() : null;
 		$guest_id = ( ! $user_id && WC()->session ) ? WC()->session->get_customer_id() : null;
 
 		// Even with a valid nonce, a caller that identifies as neither a logged-in
