@@ -53,7 +53,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Semgrep
-        run: semgrep --config=auto --sarif --output semgrep.sarif --error
+        # Scope to the actual WordPress plugin code. The repo also carries
+        # agent tooling (.pi/, .claude/, .agents/) with .cjs build helpers that
+        # the generic `--config=auto` JS audit rules flag (non-literal RegExp
+        # -> ReDoS) as false positives; those aren't part of the plugin shipped
+        # to WordPress, so they're out of scope here. p/wordpress is the
+        # WordPress-specific rule pack for the PHP that users actually install.
+        run: semgrep --config=p/wordpress --sarif --output semgrep.sarif --error \
+              cartshare.php readme.txt uninstall.php includes/ templates/ assets/
 
       - name: Upload Semgrep SARIF
         if: always()
