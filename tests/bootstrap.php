@@ -260,6 +260,16 @@ if ( ! class_exists( 'CartShare_Test_State' ) ) {
 		public static $cleared_hooks = array();
 		/** @var array Key/value store for update_option / get_option. */
 		public static $options = array();
+		/** @var bool Return value for current_user_can() stub. */
+		public static $user_can = true;
+		/** @var array[] Calls captured by wp_send_json_error(): [ 'data' => ..., 'status' => ... ] */
+		public static $json_error_calls = array();
+		/** @var array[] Calls captured by wp_send_json_success(): [ 'data' => ... ] */
+		public static $json_success_calls = array();
+		/** @var string[] Script handles passed to wp_enqueue_script(). */
+		public static $enqueued_scripts = array();
+		/** @var string[] Style handles passed to wp_enqueue_style(). */
+		public static $enqueued_styles = array();
 
 		/**
 		 * Reset all state to empty arrays (call in setUp / tearDown).
@@ -267,10 +277,15 @@ if ( ! class_exists( 'CartShare_Test_State' ) ) {
 		 * @return void
 		 */
 		public static function reset() {
-			self::$dbdelta_sql      = array();
-			self::$scheduled_events = array();
-			self::$cleared_hooks    = array();
-			self::$options          = array();
+			self::$dbdelta_sql       = array();
+			self::$scheduled_events  = array();
+			self::$cleared_hooks     = array();
+			self::$options           = array();
+			self::$user_can          = true;
+			self::$json_error_calls  = array();
+			self::$json_success_calls = array();
+			self::$enqueued_scripts  = array();
+			self::$enqueued_styles   = array();
 		}
 	}
 }
@@ -449,6 +464,271 @@ if ( ! function_exists( 'absint' ) ) {
 	}
 }
 
+if ( ! function_exists( 'sanitize_key' ) ) {
+	/**
+	 * Stub: lowercases and strips non-alphanumeric/hyphen/underscore characters.
+	 *
+	 * @param string $key Input key.
+	 * @return string
+	 */
+	function sanitize_key( $key ) {
+		$key = strtolower( (string) $key );
+		return preg_replace( '/[^a-z0-9_\-]/', '', $key );
+	}
+}
+
+if ( ! function_exists( 'get_current_user_id' ) ) {
+	/**
+	 * Stub: always returns 0 (no logged-in user in unit tests).
+	 *
+	 * @return int
+	 */
+	function get_current_user_id() {
+		return 0;
+	}
+}
+
+if ( ! defined( 'DAY_IN_SECONDS' ) ) {
+	define( 'DAY_IN_SECONDS', 86400 );
+}
+
+if ( ! function_exists( 'add_query_arg' ) ) {
+	/**
+	 * Stub: appends a single key=value pair to a URL.
+	 *
+	 * @param string $key   Query parameter key.
+	 * @param string $value Query parameter value.
+	 * @param string $url   Base URL.
+	 * @return string
+	 */
+	function add_query_arg( $key, $value, $url ) {
+		$sep = ( false === strpos( $url, '?' ) ) ? '?' : '&';
+		return $url . $sep . urlencode( $key ) . '=' . urlencode( $value );
+	}
+}
+
+if ( ! function_exists( 'home_url' ) ) {
+	/**
+	 * Stub: returns the base URL with an optional path suffix.
+	 *
+	 * @param string $path Optional path to append.
+	 * @return string
+	 */
+	function home_url( $path = '/' ) {
+		return 'http://localhost' . $path;
+	}
+}
+
+if ( ! class_exists( 'WP_REST_Response' ) ) {
+	/**
+	 * Minimal WP_REST_Response stub.
+	 */
+	class WP_REST_Response {
+		/** @var mixed Response data. */
+		public $data;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param mixed $data Response data.
+		 */
+		public function __construct( $data = null ) {
+			$this->data = $data;
+		}
+
+		/**
+		 * Return the response data.
+		 *
+		 * @return mixed
+		 */
+		public function get_data() {
+			return $this->data;
+		}
+	}
+}
+
+if ( ! function_exists( 'rest_ensure_response' ) ) {
+	/**
+	 * Stub: wraps data in a WP_REST_Response if not already one.
+	 *
+	 * @param mixed $response Response data or existing WP_REST_Response.
+	 * @return WP_REST_Response
+	 */
+	function rest_ensure_response( $response ) {
+		if ( $response instanceof WP_REST_Response ) {
+			return $response;
+		}
+		return new WP_REST_Response( $response );
+	}
+}
+
+if ( ! class_exists( 'WP_REST_Request' ) ) {
+	/**
+	 * Minimal WP_REST_Request stub.
+	 *
+	 * Supports get_param() and get_header() for unit testing REST handlers
+	 * without a live WordPress REST infrastructure.
+	 */
+	class WP_REST_Request {
+		/** @var array Request parameters (merged body + query for unit tests). */
+		protected $params = array();
+
+		/** @var array Request headers. */
+		protected $headers = array();
+
+		/**
+		 * Retrieve a request parameter by key.
+		 *
+		 * @param string $key Parameter name.
+		 * @return mixed|null
+		 */
+		public function get_param( $key ) {
+			return isset( $this->params[ $key ] ) ? $this->params[ $key ] : null;
+		}
+
+		/**
+		 * Set a request parameter (test helper).
+		 *
+		 * @param string $key   Parameter name.
+		 * @param mixed  $value Parameter value.
+		 * @return void
+		 */
+		public function set_param( $key, $value ) {
+			$this->params[ $key ] = $value;
+		}
+
+		/**
+		 * Retrieve a request header value.
+		 *
+		 * @param string $name Header name.
+		 * @return string|null
+		 */
+		public function get_header( $name ) {
+			return isset( $this->headers[ $name ] ) ? $this->headers[ $name ] : null;
+		}
+
+		/**
+		 * Set a request header (test helper).
+		 *
+		 * @param string $name  Header name.
+		 * @param string $value Header value.
+		 * @return void
+		 */
+		public function set_header( $name, $value ) {
+			$this->headers[ $name ] = $value;
+		}
+	}
+}
+
+if ( ! class_exists( 'CartShare_Test_Json_Die' ) ) {
+	/**
+	 * Exception thrown by wp_send_json_error / wp_send_json_success stubs to
+	 * simulate the wp_die() call that WordPress makes after sending JSON output.
+	 * Tests that trigger a JSON response should catch this exception.
+	 */
+	class CartShare_Test_Json_Die extends \RuntimeException {}
+}
+
+if ( ! function_exists( 'check_ajax_referer' ) ) {
+	/**
+	 * Stub: no-op — always returns true in unit tests.
+	 *
+	 * @param string     $action    Expected nonce action.
+	 * @param string|int $query_arg Query variable key to check.
+	 * @param bool       $die       Whether to die on failure (ignored in stub).
+	 * @return int
+	 */
+	function check_ajax_referer( $action = -1, $query_arg = false, $die = true ) {
+		return 1;
+	}
+}
+
+if ( ! function_exists( 'current_user_can' ) ) {
+	/**
+	 * Stub: returns CartShare_Test_State::$user_can.
+	 *
+	 * @param string $capability Capability to check.
+	 * @param mixed  ...$args    Extra args (ignored).
+	 * @return bool
+	 */
+	function current_user_can( $capability, ...$args ) {
+		return CartShare_Test_State::$user_can;
+	}
+}
+
+if ( ! function_exists( 'wp_send_json_error' ) ) {
+	/**
+	 * Stub: records the call in CartShare_Test_State::$json_error_calls, then
+	 * throws CartShare_Test_Json_Die to simulate wp_die() — the real WordPress
+	 * function terminates execution after sending the response.
+	 *
+	 * @param mixed $data        Response data.
+	 * @param int   $status_code HTTP status code.
+	 * @param int   $flags       JSON encode flags (ignored).
+	 * @return void
+	 * @throws CartShare_Test_Json_Die Always thrown after recording.
+	 */
+	function wp_send_json_error( $data = null, $status_code = null, $flags = 0 ) {
+		CartShare_Test_State::$json_error_calls[] = array(
+			'data'   => $data,
+			'status' => $status_code,
+		);
+		throw new CartShare_Test_Json_Die( 'wp_send_json_error' );
+	}
+}
+
+if ( ! function_exists( 'wp_send_json_success' ) ) {
+	/**
+	 * Stub: records the call in CartShare_Test_State::$json_success_calls, then
+	 * throws CartShare_Test_Json_Die to simulate wp_die() — the real WordPress
+	 * function terminates execution after sending the response.
+	 *
+	 * @param mixed $data        Response data.
+	 * @param int   $status_code HTTP status code (ignored in stub).
+	 * @param int   $flags       JSON encode flags (ignored).
+	 * @return void
+	 * @throws CartShare_Test_Json_Die Always thrown after recording.
+	 */
+	function wp_send_json_success( $data = null, $status_code = null, $flags = 0 ) {
+		CartShare_Test_State::$json_success_calls[] = array(
+			'data' => $data,
+		);
+		throw new CartShare_Test_Json_Die( 'wp_send_json_success' );
+	}
+}
+
+if ( ! function_exists( 'wp_enqueue_script' ) ) {
+	/**
+	 * Stub: records the handle in CartShare_Test_State::$enqueued_scripts.
+	 *
+	 * @param string           $handle    Script handle.
+	 * @param string           $src       Script URL.
+	 * @param string[]         $deps      Dependencies.
+	 * @param string|bool|null $ver       Version string.
+	 * @param bool             $in_footer Whether to enqueue in footer.
+	 * @return void
+	 */
+	function wp_enqueue_script( $handle, $src = '', $deps = array(), $ver = false, $in_footer = false ) {
+		CartShare_Test_State::$enqueued_scripts[] = $handle;
+	}
+}
+
+if ( ! function_exists( 'wp_enqueue_style' ) ) {
+	/**
+	 * Stub: records the handle in CartShare_Test_State::$enqueued_styles.
+	 *
+	 * @param string           $handle Style handle.
+	 * @param string           $src    Stylesheet URL.
+	 * @param string[]         $deps   Dependencies.
+	 * @param string|bool|null $ver    Version string.
+	 * @param string           $media  Media type.
+	 * @return void
+	 */
+	function wp_enqueue_style( $handle, $src = '', $deps = array(), $ver = false, $media = 'all' ) {
+		CartShare_Test_State::$enqueued_styles[] = $handle;
+	}
+}
+
 if ( ! function_exists( 'is_cart' ) ) {
     /**
      * Stub: returns false — no cart page in unit test context.
@@ -491,6 +771,18 @@ require_once CARTSHARE_PATH . 'includes/class-cartshare-db.php';
 require_once CARTSHARE_PATH . 'includes/class-cartshare-cart.php';
 require_once CARTSHARE_PATH . 'includes/class-cartshare-activator.php';
 require_once CARTSHARE_PATH . 'includes/class-cartshare-deactivator.php';
-require_once CARTSHARE_PATH . 'includes/class-cartshare-admin.php';
-require_once CARTSHARE_PATH . 'includes/class-cartshare-frontend.php';
-require_once CARTSHARE_PATH . 'includes/class-cartshare-analytics.php';
+if ( file_exists( CARTSHARE_PATH . 'includes/class-cartshare-rest.php' ) ) {
+	require_once CARTSHARE_PATH . 'includes/class-cartshare-rest.php';
+}
+if ( file_exists( CARTSHARE_PATH . 'includes/class-cartshare-admin.php' ) ) {
+	require_once CARTSHARE_PATH . 'includes/class-cartshare-admin.php';
+}
+if ( file_exists( CARTSHARE_PATH . 'includes/class-cartshare-frontend.php' ) ) {
+	require_once CARTSHARE_PATH . 'includes/class-cartshare-frontend.php';
+}
+if ( file_exists( CARTSHARE_PATH . 'includes/class-cartshare-cart-builder.php' ) ) {
+	require_once CARTSHARE_PATH . 'includes/class-cartshare-cart-builder.php';
+}
+if ( file_exists( CARTSHARE_PATH . 'includes/class-cartshare-analytics.php' ) ) {
+	require_once CARTSHARE_PATH . 'includes/class-cartshare-analytics.php';
+}

@@ -1,0 +1,81 @@
+/**
+ * CartShare Admin Cart Builder Styles
+ *
+ * Scoped to .cartshare-cart-builder to avoid leaking into other WP Admin pages.
+ *
+ * @package CartShare
+ */
+
+/* ============================================================
+	Wrapper
+	============================================================ */
+.cartshare-cart-builder {
+	max-width: 1120px;
+}
+
+/* ============================================================
+	Product search — autocomplete dropdown
+	============================================================ */
+.cartshare-cart-builder #cartshare-search-results {
+	position: absolute;
+	z-index: 9999;
+	background: #fff;
+	border: 1px solid #ccd0d4;
+	max-height: 300px;
+	overflow-y: auto;
+	width: 100%;
+}
+
+.cartshare-cart-builder .cartshare-search-result-row {
+	padding: 8px 12px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.cartshare-cart-builder .cartshare-search-result-row:hover {
+	background: #f0f0f1;
+}
+
+/* ============================================================
+	Item list table
+	============================================================ */
+.cartshare-cart-builder #cartshare-item-list {
+	width: 100%;
+	margin-top: 16px;
+}
+
+/* ============================================================
+	Variation selector
+	============================================================ */
+.cartshare-cart-builder .cartshare-variation-container select {
+	width: 100%;
+}
+
+/* ============================================================
+	Generated link container
+	============================================================ */
+.cartshare-cart-builder #cartshare-link-container {
+	margin-top: 16px;
+	padding: 12px;
+	background: #f0f6fc;
+	border: 1px solid #c3d9ed;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.cartshare-cart-builder #cartshare-share-url {
+	flex: 1;
+	font-family: monospace;
+}
+
+/* ============================================================
+	Inline error message
+	============================================================ */
+.cartshare-cart-builder .cartshare-inline-error {
+	color: #d63638;
+	margin: 8px 0;
+	font-weight: 600;
+}
