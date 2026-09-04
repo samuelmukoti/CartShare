@@ -75,7 +75,7 @@ class Stub_CartShare_DB_REST extends CartShare_DB {
 		// Keep $wpdb->insert_id in sync so CartShare_Analytics::record() (which
 		// reads it after $this->insert()) sees the id this stub "inserted".
 		if ( isset( $GLOBALS['wpdb'] ) && $GLOBALS['wpdb'] instanceof Stub_WPDB_Activator ) {
-			$this->auto_increment++;
+			++$this->auto_increment;
 			$GLOBALS['wpdb']->insert_id = $this->auto_increment;
 		}
 		return $this->token;
