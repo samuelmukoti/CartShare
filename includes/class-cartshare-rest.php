@@ -29,12 +29,51 @@ class CartShare_REST {
 	private $db;
 
 	/**
+	 * CartShare_Analytics instance, when the class is available.
+	 *
+	 * Reused for all analytics writes so the REST controller shares the same
+	 * instance the plugin singleton wired (any future per-instance state such
+	 * as caching or rate limiting stays consistent).
+	 *
+	 * @var CartShare_Analytics|null
+	 */
+	private $analytics = null;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param CartShare_DB $db CartShare database instance.
 	 */
 	public function __construct( CartShare_DB $db ) {
 		$this->db = $db;
+	}
+
+	/**
+	 * Lazily obtain the shared CartShare_Analytics instance.
+	 *
+	 * Prefers the instance wired by CartShare_Plugin::boot() (exposed on the
+	 * singleton) and falls back to constructing one if the plugin was not
+	 * booted (e.g. isolated test contexts). Returns null when the analytics
+	 * class does not exist so call sites can skip logging gracefully.
+	 *
+	 * @return CartShare_Analytics|null
+	 */
+	private function get_analytics(): ?CartShare_Analytics {
+		if ( null !== $this->analytics ) {
+			return $this->analytics;
+		}
+
+		if ( ! class_exists( 'CartShare_Analytics' ) ) {
+			return null;
+		}
+
+		if ( class_exists( 'CartShare_Plugin' ) && CartShare_Plugin::instance()->analytics instanceof CartShare_Analytics ) {
+			$this->analytics = CartShare_Plugin::instance()->analytics;
+		} else {
+			$this->analytics = new CartShare_Analytics();
+		}
+
+		return $this->analytics;
 	}
 
 	/**
@@ -207,10 +246,11 @@ class CartShare_REST {
 
 		// Log the share for the analytics dashboard. The channel defaults to the
 		// copy-link action that every save produces; the popup may override it.
-		if ( class_exists( 'CartShare_Analytics' ) ) {
+		$analytics = $this->get_analytics();
+		if ( null !== $analytics ) {
 			$channel = sanitize_key( (string) ( $request->get_param( 'channel' ) ?? '' ) );
 			$channel = '' !== $channel ? $channel : 'copy_link';
-			( new CartShare_Analytics() )->record_save( $channel, $token, $user_id );
+			$analytics->record_save( $channel, $token, $user_id );
 		}
 
 		return rest_ensure_response(
@@ -264,8 +304,9 @@ class CartShare_REST {
 		$warnings    = $cart_helper->restore( $cart_data );
 
 		// Log the restore (and stash it on the session for order attribution).
-		if ( class_exists( 'CartShare_Analytics' ) ) {
-			( new CartShare_Analytics() )->record_restore( $token, get_current_user_id() ?: null );
+		$analytics = $this->get_analytics();
+		if ( null !== $analytics ) {
+			$analytics->record_restore( $token, get_current_user_id() ?: null );
 		}
 
 		// Resolve the post-restore redirect target from admin settings.
@@ -359,14 +400,15 @@ class CartShare_REST {
 		}
 
 		// Log the email share against the cart token embedded in the share URL.
-		if ( class_exists( 'CartShare_Analytics' ) ) {
+		$analytics = $this->get_analytics();
+		if ( null !== $analytics ) {
 			$token = '';
 			$query = wp_parse_url( $share_url, PHP_URL_QUERY );
 			if ( $query ) {
 				parse_str( $query, $query_args );
 				$token = isset( $query_args['cartshare_restore'] ) ? sanitize_text_field( $query_args['cartshare_restore'] ) : '';
 			}
-			( new CartShare_Analytics() )->record_save( 'email', $token, get_current_user_id() ?: null );
+			$analytics->record_save( 'email', $token, get_current_user_id() ?: null );
 		}
 
 		return rest_ensure_response( array( 'sent' => true ) );
