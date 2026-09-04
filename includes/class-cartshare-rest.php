@@ -91,7 +91,7 @@ class CartShare_REST {
 			array(
 				'methods'             => WP_REST_Server::DELETABLE,
 				'callback'            => array( $this, 'delete' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => array( $this, 'check_save_nonce' ),
 			)
 		);
 
@@ -387,6 +387,17 @@ class CartShare_REST {
 		$token    = sanitize_text_field( $request->get_param( 'token' ) );
 		$user_id  = get_current_user_id() ?: null;
 		$guest_id = ( ! $user_id && WC()->session ) ? WC()->session->get_customer_id() : null;
+
+		// Even with a valid nonce, a caller that identifies as neither a logged-in
+		// user nor a WooCommerce guest session cannot own any cart — reject so an
+		// anonymous nonce-holder cannot delete carts by token alone.
+		if ( null === $user_id && ( null === $guest_id || '' === $guest_id ) ) {
+			return new WP_Error(
+				'cartshare_forbidden',
+				__( 'You do not have permission to delete this cart.', 'cartshare' ),
+				array( 'status' => 403 )
+			);
+		}
 
 		$deleted = $this->db->delete_by_token( $token, $user_id, $guest_id );
 
