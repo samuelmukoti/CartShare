@@ -150,8 +150,18 @@ class CartShare_Analytics {
 	public function record_restore( string $token, ?int $user_id ) {
 		$event_id = $this->record( 'restore', null, $token, $user_id );
 
-		if ( $event_id && function_exists( 'WC' ) && WC()->session ) {
-			WC()->session->set( self::SESSION_KEY, $event_id );
+		if ( $event_id && function_exists( 'WC' ) ) {
+			// Ensure the session store is initialised before checking it — on the
+			// public restore request the WC session may not have been loaded yet,
+			// and silently skipping the stash would lose restore-to-order
+			// attribution (guests are the majority of share-link traffic).
+			if ( ! WC()->session && function_exists( 'wc_load_session' ) ) {
+				wc_load_session();
+			}
+
+			if ( WC()->session ) {
+				WC()->session->set( self::SESSION_KEY, $event_id );
+			}
 		}
 
 		return $event_id;
