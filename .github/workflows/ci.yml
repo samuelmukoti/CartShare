@@ -33,9 +33,19 @@ jobs:
             composer install --no-progress --no-interaction
           fi
 
+      - name: Install WordPress Coding Standards
+        run: |
+          composer global require --dev wp-coding-standards/wpcs:"^3.0" \
+            dealerdirect/phpcodesniffer-composer-installer:"^1.0" \
+            --no-progress --no-interaction
+          echo "$HOME/.composer/vendor/bin" >> $GITHUB_PATH
+
       - name: Lint (WPCS)
         run: |
-          vendor/bin/phpcs .
+          phpcs --standard=WordPress \
+            --extensions=php \
+            --ignore=vendor/,node_modules/ \
+            .
 
       - name: Test
         if: hashFiles('phpunit.xml*') != ''
