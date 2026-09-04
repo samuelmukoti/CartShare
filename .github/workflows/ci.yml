@@ -35,7 +35,7 @@ jobs:
 
       - name: Lint (WPCS)
         run: |
-          phpcs --standard=WordPress \
+          vendor/bin/phpcs --standard=WordPress \
             --extensions=php \
             --ignore=vendor/,node_modules/ \
             .
