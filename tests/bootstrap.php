@@ -113,7 +113,6 @@ if ( ! function_exists( 'sanitize_text_field' ) ) {
     }
 }
 
-<<<<<<< Updated upstream
 if ( ! function_exists( 'wp_unslash' ) ) {
     /**
      * Stub: returns the value unchanged (no slash-stripping needed in test context).
@@ -123,7 +122,9 @@ if ( ! function_exists( 'wp_unslash' ) ) {
      */
     function wp_unslash( $value ) {
         return $value;
-=======
+    }
+}
+
 if ( ! function_exists( 'sanitize_key' ) ) {
     /**
      * Stub: lowercases and strips to [a-z0-9_-].
@@ -133,7 +134,6 @@ if ( ! function_exists( 'sanitize_key' ) ) {
      */
     function sanitize_key( $key ) {
         return preg_replace( '/[^a-z0-9_\-]/', '', strtolower( (string) $key ) );
->>>>>>> Stashed changes
     }
 }
 
@@ -491,9 +491,6 @@ require_once CARTSHARE_PATH . 'includes/class-cartshare-db.php';
 require_once CARTSHARE_PATH . 'includes/class-cartshare-cart.php';
 require_once CARTSHARE_PATH . 'includes/class-cartshare-activator.php';
 require_once CARTSHARE_PATH . 'includes/class-cartshare-deactivator.php';
-<<<<<<< Updated upstream
 require_once CARTSHARE_PATH . 'includes/class-cartshare-admin.php';
 require_once CARTSHARE_PATH . 'includes/class-cartshare-frontend.php';
-=======
 require_once CARTSHARE_PATH . 'includes/class-cartshare-analytics.php';
->>>>>>> Stashed changes
