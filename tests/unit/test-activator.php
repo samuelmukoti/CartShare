@@ -31,14 +31,20 @@ class Stub_WPDB_Activator {
 	}
 
 	/**
-	 * Stub insert — always succeeds.
+	 * Stub insert — always succeeds and records $insert_id like a real wpdb.
 	 *
 	 * @param string     $table  Table name.
 	 * @param array      $data   Data array.
 	 * @param array|null $format Ignored.
 	 * @return int
 	 */
+	public $insert_id = 0;
+
+	private $stub_auto_increment = 0;
+
 	public function insert( $table, $data, $format = null ) {
+		$this->stub_auto_increment++;
+		$this->insert_id = $this->stub_auto_increment;
 		return 1;
 	}
 
