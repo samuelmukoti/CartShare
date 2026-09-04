@@ -98,7 +98,7 @@ class CartShare_MyAccount {
 	 * @return void
 	 */
 	public function render_tab(): void {
-		$user_id    = get_current_user_id();
+		$user_id     = get_current_user_id();
 		$saved_carts = $this->db->list_for_user( $user_id );
 
 		$template = CARTSHARE_PATH . 'templates/myaccount-saved-carts.php';
@@ -158,7 +158,7 @@ class CartShare_MyAccount {
 		}
 
 		// Ownership check: the logged-in user must own this cart row.
-		if ( (int) $row['user_id'] !== get_current_user_id() ) {
+		if ( get_current_user_id() !== (int) $row['user_id'] ) {
 			wc_add_notice( __( 'You do not have permission to manage this cart.', 'cartshare' ), 'error' );
 			wp_safe_redirect( wc_get_account_endpoint_url( 'saved-carts' ) );
 			exit;

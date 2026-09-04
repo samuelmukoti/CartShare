@@ -166,9 +166,9 @@ class CartShare_Blocks_Integration implements \Automattic\WooCommerce\Blocks\Int
 		$button_text = sanitize_hex_color( get_option( 'cartshare_color_button_text', '#ffffff' ) );
 
 		return array(
-			'primary'    => $primary ?: '#4f46e5',
-			'buttonBg'   => $button_bg ?: '#4f46e5',
-			'buttonText' => $button_text ?: '#ffffff',
+			'primary'    => '' === $primary ? '#4f46e5' : $primary,
+			'buttonBg'   => '' === $button_bg ? '#4f46e5' : $button_bg,
+			'buttonText' => '' === $button_text ? '#ffffff' : $button_text,
 		);
 	}
 }

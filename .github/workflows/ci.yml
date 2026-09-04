@@ -35,10 +35,7 @@ jobs:
 
       - name: Lint (WPCS)
         run: |
-          vendor/bin/phpcs --standard=WordPress \
-            --extensions=php \
-            --ignore=vendor/,node_modules/ \
-            .
+          vendor/bin/phpcs .
 
       - name: Test
         if: hashFiles('phpunit.xml*') != ''

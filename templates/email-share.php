@@ -26,10 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Resolve branding options at template-include time.
 // These values are used inline in the HTML/CSS below.
-$header_color = sanitize_hex_color( get_option( 'cartshare_color_primary', '#4f46e5' ) ) ?: '#4f46e5';
-$button_bg    = sanitize_hex_color( get_option( 'cartshare_color_button_bg', '#4f46e5' ) ) ?: '#4f46e5';
-$button_text  = sanitize_hex_color( get_option( 'cartshare_color_button_text', '#ffffff' ) ) ?: '#ffffff';
-$footer_color = sanitize_hex_color( get_option( 'cartshare_color_primary', '#4f46e5' ) ) ?: '#4f46e5';
+$header_color = sanitize_hex_color( get_option( 'cartshare_color_primary', '#4f46e5' ) );
+$header_color = '' === $header_color ? '#4f46e5' : $header_color;
+$button_bg    = sanitize_hex_color( get_option( 'cartshare_color_button_bg', '#4f46e5' ) );
+$button_bg    = '' === $button_bg ? '#4f46e5' : $button_bg;
+$button_text  = sanitize_hex_color( get_option( 'cartshare_color_button_text', '#ffffff' ) );
+$button_text  = '' === $button_text ? '#ffffff' : $button_text;
+$footer_color = sanitize_hex_color( get_option( 'cartshare_color_primary', '#4f46e5' ) );
+$footer_color = '' === $footer_color ? '#4f46e5' : $footer_color;
 $site_name    = get_bloginfo( 'name' );
 $site_url     = home_url( '/' );
 

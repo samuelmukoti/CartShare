@@ -54,38 +54,38 @@ class CartShare_DB {
 			$expires_at = gmdate( 'Y-m-d H:i:s', time() + $ttl_seconds );
 		}
 
-		$data = array(
-			'token'      => $token,
-			'user_id'    => $user_id ?: null,
-			'guest_id'   => $guest_id ?: null,
-			'name'       => $name ? sanitize_text_field( $name ) : null,
-			'source'     => $source ? sanitize_key( $source ) : null,
-			'cart_data'  => wp_json_encode( $cart_data ),
-			'created_at' => current_time( 'mysql', true ),
-			'expires_at' => $expires_at,
-		);
+			$data = array(
+				'token'      => $token,
+				'user_id'    => ( null !== $user_id ) ? $user_id : null,
+				'guest_id'   => ( null !== $guest_id ) ? $guest_id : null,
+				'name'       => $name ? sanitize_text_field( $name ) : null,
+				'source'     => $source ? sanitize_key( $source ) : null,
+				'cart_data'  => wp_json_encode( $cart_data ),
+				'created_at' => current_time( 'mysql', true ),
+				'expires_at' => $expires_at,
+			);
 
-		$format = array( '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s' );
+					$format = array( '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s' );
 
-		$result = $wpdb->insert( $this->table(), $data, $format );
+					$result = $wpdb->insert( $this->table(), $data, $format );
 
-		// Retry once on duplicate token (collision probability is negligible but handled per spec).
-		if ( false === $result ) {
-			if ( $wpdb->last_error && false !== strpos( $wpdb->last_error, 'Duplicate entry' ) ) {
-				$token         = CartShare_Token::generate();
-				$data['token'] = $token;
-				$result        = $wpdb->insert( $this->table(), $data, $format );
-			}
-
+					// Retry once on duplicate token (collision probability is negligible but handled per spec).
 			if ( false === $result ) {
-				return new WP_Error(
-					'cartshare_db_insert_failed',
-					__( 'Failed to save cart. Please try again.', 'cartshare' )
-				);
-			}
-		}
+				if ( $wpdb->last_error && false !== strpos( $wpdb->last_error, 'Duplicate entry' ) ) {
+					$token         = CartShare_Token::generate();
+					$data['token'] = $token;
+					$result        = $wpdb->insert( $this->table(), $data, $format );
+				}
 
-		return $token;
+				if ( false === $result ) {
+					return new WP_Error(
+						'cartshare_db_insert_failed',
+						__( 'Failed to save cart. Please try again.', 'cartshare' )
+					);
+				}
+			}
+
+					return $token;
 	}
 
 	/**
@@ -106,7 +106,7 @@ class CartShare_DB {
 			ARRAY_A
 		);
 
-		return $row ?: null;
+		return null === $row ? null : $row;
 	}
 
 	/**
@@ -127,7 +127,7 @@ class CartShare_DB {
 			ARRAY_A
 		);
 
-		return $rows ?: array();
+		return array() === $rows ? array() : $rows;
 	}
 
 	/**
@@ -148,7 +148,7 @@ class CartShare_DB {
 			ARRAY_A
 		);
 
-		return $rows ?: array();
+		return array() === $rows ? array() : $rows;
 	}
 
 	/**
@@ -201,7 +201,7 @@ class CartShare_DB {
 			ARRAY_A
 		);
 
-		return $rows ?: array();
+		return array() === $rows ? array() : $rows;
 	}
 
 	/**

@@ -37,7 +37,7 @@ $print_footer = wp_kses_post( get_option( 'cartshare_print_footer', '' ) );
 $site_name    = esc_html( get_bloginfo( 'name' ) );
 
 // Build line items with live product data where available.
-$line_items = array();
+$line_items  = array();
 $grand_total = 0.0;
 
 foreach ( $cart_items as $item ) {
@@ -45,7 +45,7 @@ foreach ( $cart_items as $item ) {
 	$variation_id = isset( $item['variation_id'] ) ? absint( $item['variation_id'] ) : 0;
 	$quantity     = isset( $item['quantity'] ) ? absint( $item['quantity'] ) : 1;
 
-	$product_id_to_load = $variation_id ?: $product_id;
+	$product_id_to_load = $variation_id ? $variation_id : $product_id;
 	$product            = $product_id_to_load ? wc_get_product( $product_id_to_load ) : null;
 
 	if ( $product ) {
@@ -59,8 +59,8 @@ foreach ( $cart_items as $item ) {
 		$subtotal = 0.0;
 	}
 
-	$grand_total   += $subtotal;
-	$line_items[]   = array(
+	$grand_total += $subtotal;
+	$line_items[] = array(
 		'name'     => $name,
 		'quantity' => $quantity,
 		'price'    => $price,
@@ -75,7 +75,7 @@ foreach ( $cart_items as $item ) {
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title><?php printf( /* translators: %s: site name */ esc_html__( 'Cart — %s', 'cartshare' ), $site_name ); ?></title>
+	<title><?php echo esc_html( sprintf( /* translators: %s: site name */ __( 'Cart — %s', 'cartshare' ), $site_name ) ); ?></title>
 	<style>
 		*, *::before, *::after { box-sizing: border-box; }
 

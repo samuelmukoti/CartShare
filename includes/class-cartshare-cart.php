@@ -80,7 +80,7 @@ class CartShare_Cart {
 	 * The returned array is safe to pass to wp_json_encode().
 	 *
 	 * @return array {
-	 *     @type array[] $items   Each item: product_id, variation_id, quantity, variation, cart_item_data.
+	 *     @type array[] $items Each item: product_id, variation_id, quantity, variation, cart_item_data.
 	 *     @type string[] $coupons Applied coupon codes.
 	 * }
 	 */
@@ -120,10 +120,7 @@ class CartShare_Cart {
 	 * Always calls calculate_totals() at the end so prices reflect current
 	 * WooCommerce pricing rules.
 	 *
-	 * @param array $cart_data {
-	 *     @type array[] $items   Each item: product_id, variation_id, quantity, variation, cart_item_data.
-	 *     @type string[] $coupons Coupon codes to re-apply.
-	 * }
+	 * @param array $cart_data Cart data to restore: items (each with product_id, variation_id, quantity, variation, cart_item_data) and coupon codes.
 	 *
 	 * @return string[] Array of human-readable warning strings (empty on full success).
 	 */

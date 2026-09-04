@@ -71,7 +71,7 @@ class CartShare_Activator {
 	/**
 	 * Create or upgrade the cartshare_carts table using dbDelta().
 	 *
-	 * dbDelta() compares the supplied SQL against the existing table and adds
+	 * DbDelta() compares the supplied SQL against the existing table and adds
 	 * any missing columns or indexes — it never removes them, so existing data
 	 * is always safe. The function lives in wp-admin/includes/upgrade.php which
 	 * is NOT loaded automatically on the front-end, so we require it explicitly.
