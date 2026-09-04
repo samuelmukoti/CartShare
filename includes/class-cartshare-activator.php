@@ -24,8 +24,10 @@ class CartShare_Activator {
 	 *
 	 * Bump this constant whenever the table structure changes so that
 	 * existing installs know to run dbDelta() again on upgrade.
+	 *
+	 * 1.1.0 — added the {prefix}cartshare_events analytics log table.
 	 */
-	const DB_VERSION = '1.0.0';
+	const DB_VERSION = '1.1.0';
 
 	/**
 	 * Run all activation tasks.
@@ -38,8 +40,31 @@ class CartShare_Activator {
 	 */
 	public static function activate() {
 		self::create_table();
+		self::create_events_table();
 		self::schedule_cleanup();
 		self::flush_rewrite_rules();
+		update_option( 'cartshare_db_version', self::DB_VERSION );
+	}
+
+	/**
+	 * Upgrade the schema on existing installs when DB_VERSION has changed.
+	 *
+	 * The activation hook only fires when a plugin is (re)activated, so sites
+	 * that update the plugin via WordPress.org / Composer never re-run
+	 * activate(). This method is called on every admin request from
+	 * CartShare_Plugin::boot(); the dbDelta() calls only run when the stored
+	 * cartshare_db_version option lags behind the bundled DB_VERSION, so the
+	 * happy path is a single get_option() comparison.
+	 *
+	 * @return void
+	 */
+	public static function maybe_upgrade() {
+		if ( self::DB_VERSION === get_option( 'cartshare_db_version' ) ) {
+			return;
+		}
+
+		self::create_table();
+		self::create_events_table();
 		update_option( 'cartshare_db_version', self::DB_VERSION );
 	}
 
@@ -84,6 +109,42 @@ class CartShare_Activator {
   KEY user_id (user_id),
   KEY guest_id (guest_id),
   KEY expires_at (expires_at)
+) {$charset_collate};";
+
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		dbDelta( $sql );
+	}
+
+	/**
+	 * Create or upgrade the cartshare_events analytics log table via dbDelta().
+	 *
+	 * One row is written per share/restore action. The table is intentionally
+	 * privacy-light: only the WordPress user_id of logged-in users is stored —
+	 * guest actions record a NULL user_id, so no guest session ID, IP, or other
+	 * PII ever lands here. order_id is back-filled when a restored cart results
+	 * in a placed order, which powers the restore-to-order conversion metric.
+	 *
+	 * @global \wpdb $wpdb WordPress database abstraction object.
+	 * @return void
+	 */
+	private static function create_events_table() {
+		global $wpdb;
+
+		$table_name      = $wpdb->prefix . 'cartshare_events';
+		$charset_collate = $wpdb->get_charset_collate();
+
+		$sql = "CREATE TABLE {$table_name} (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  event_type VARCHAR(20) NOT NULL,
+  channel VARCHAR(20) NULL DEFAULT NULL,
+  token VARCHAR(32) NULL DEFAULT NULL,
+  user_id BIGINT UNSIGNED NULL DEFAULT NULL,
+  order_id BIGINT UNSIGNED NULL DEFAULT NULL,
+  created_at DATETIME NOT NULL,
+  PRIMARY KEY  (id),
+  KEY event_type (event_type),
+  KEY created_at (created_at),
+  KEY token (token)
 ) {$charset_collate};";
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';

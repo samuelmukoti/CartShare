@@ -205,6 +205,14 @@ class CartShare_REST {
 			return $token;
 		}
 
+		// Log the share for the analytics dashboard. The channel defaults to the
+		// copy-link action that every save produces; the popup may override it.
+		if ( class_exists( 'CartShare_Analytics' ) ) {
+			$channel = sanitize_key( (string) ( $request->get_param( 'channel' ) ?? '' ) );
+			$channel = '' !== $channel ? $channel : 'copy_link';
+			( new CartShare_Analytics() )->record_save( $channel, $token, $user_id );
+		}
+
 		return rest_ensure_response(
 			array(
 				'token'     => $token,
@@ -254,6 +262,11 @@ class CartShare_REST {
 		$cart_data   = json_decode( $row['cart_data'], true );
 		$cart_helper = new CartShare_Cart( $this->db );
 		$warnings    = $cart_helper->restore( $cart_data );
+
+		// Log the restore (and stash it on the session for order attribution).
+		if ( class_exists( 'CartShare_Analytics' ) ) {
+			( new CartShare_Analytics() )->record_restore( $token, get_current_user_id() ?: null );
+		}
 
 		// Resolve the post-restore redirect target from admin settings.
 		$redirect_setting = get_option( 'cartshare_restore_redirect', 'cart' );
@@ -343,6 +356,17 @@ class CartShare_REST {
 				__( 'Failed to send the email. Please try again.', 'cartshare' ),
 				array( 'status' => 500 )
 			);
+		}
+
+		// Log the email share against the cart token embedded in the share URL.
+		if ( class_exists( 'CartShare_Analytics' ) ) {
+			$token = '';
+			$query = wp_parse_url( $share_url, PHP_URL_QUERY );
+			if ( $query ) {
+				parse_str( $query, $query_args );
+				$token = isset( $query_args['cartshare_restore'] ) ? sanitize_text_field( $query_args['cartshare_restore'] ) : '';
+			}
+			( new CartShare_Analytics() )->record_save( 'email', $token, get_current_user_id() ?: null );
 		}
 
 		return rest_ensure_response( array( 'sent' => true ) );

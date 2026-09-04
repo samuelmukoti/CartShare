@@ -48,6 +48,13 @@ class CartShare_Plugin {
 	public $token = null;
 
 	/**
+	 * CartShare_Analytics instance.
+	 *
+	 * @var CartShare_Analytics|null
+	 */
+	public $analytics = null;
+
+	/**
 	 * Private constructor — use instance() to obtain the singleton.
 	 */
 	private function __construct() {}
@@ -85,6 +92,12 @@ class CartShare_Plugin {
 
 		$this->load_dependencies();
 		$this->init_subsystems();
+
+		// Bring the DB schema up to date on installs that updated the plugin
+		// without re-running the activation hook. No-op once versions match.
+		if ( class_exists( 'CartShare_Activator' ) ) {
+			CartShare_Activator::maybe_upgrade();
+		}
 	}
 
 	/**
@@ -137,6 +150,11 @@ class CartShare_Plugin {
 		if ( file_exists( CARTSHARE_PATH . 'includes/class-cartshare-cron.php' ) ) {
 			require_once CARTSHARE_PATH . 'includes/class-cartshare-cron.php';
 		}
+
+		// Phase 8 — Analytics event log + dashboard.
+		if ( file_exists( CARTSHARE_PATH . 'includes/class-cartshare-analytics.php' ) ) {
+			require_once CARTSHARE_PATH . 'includes/class-cartshare-analytics.php';
+		}
 	}
 
 	/**
@@ -183,6 +201,12 @@ class CartShare_Plugin {
 		// Phase 7 — Cron cleanup.
 		if ( class_exists( 'CartShare_Cron' ) ) {
 			( new CartShare_Cron( $this->db ) )->init_hooks();
+		}
+
+		// Phase 8 — Analytics event log + dashboard.
+		if ( class_exists( 'CartShare_Analytics' ) ) {
+			$this->analytics = new CartShare_Analytics();
+			$this->analytics->init_hooks();
 		}
 	}
 }
