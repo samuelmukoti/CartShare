@@ -125,6 +125,18 @@ if ( ! function_exists( 'wp_unslash' ) ) {
     }
 }
 
+if ( ! function_exists( 'sanitize_key' ) ) {
+    /**
+     * Stub: lowercases and strips to [a-z0-9_-].
+     *
+     * @param string $key Input key.
+     * @return string
+     */
+    function sanitize_key( $key ) {
+        return preg_replace( '/[^a-z0-9_\-]/', '', strtolower( (string) $key ) );
+    }
+}
+
 if ( ! function_exists( 'wp_json_encode' ) ) {
     /**
      * Stub: thin wrapper around json_encode.
@@ -222,6 +234,12 @@ if ( ! defined( 'ARRAY_A' ) ) {
 }
 if ( ! defined( 'OBJECT' ) ) {
 	define( 'OBJECT', 'OBJECT' );
+}
+if ( ! defined( 'DAY_IN_SECONDS' ) ) {
+	define( 'DAY_IN_SECONDS', 86400 );
+}
+if ( ! defined( 'WEEK_IN_SECONDS' ) ) {
+	define( 'WEEK_IN_SECONDS', 604800 );
 }
 
 // ------------------------------------------------------------------
@@ -764,4 +782,7 @@ if ( file_exists( CARTSHARE_PATH . 'includes/class-cartshare-frontend.php' ) ) {
 }
 if ( file_exists( CARTSHARE_PATH . 'includes/class-cartshare-cart-builder.php' ) ) {
 	require_once CARTSHARE_PATH . 'includes/class-cartshare-cart-builder.php';
+}
+if ( file_exists( CARTSHARE_PATH . 'includes/class-cartshare-analytics.php' ) ) {
+	require_once CARTSHARE_PATH . 'includes/class-cartshare-analytics.php';
 }

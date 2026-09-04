@@ -10,10 +10,13 @@ composer.lock
 .wp-data/
 .db-data/
 
-# DevStation data directory
+# DevStation generated files
 .devstation/
 .devstation-status
 .devstation-security.json
+.worktrees/
+.security-key
+logs/security/
 
 # Local Claude Code settings
 .claude_settings.json

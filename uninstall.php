@@ -7,7 +7,7 @@
  * prevent direct execution outside of the uninstall context.
  *
  * Tasks performed:
- *  1. Drop the {prefix}cartshare_carts custom table.
+ *  1. Drop the {prefix}cartshare_carts and {prefix}cartshare_events tables.
  *  2. Delete all plugin options whose names begin with 'cartshare_'.
  *  3. Clear the scheduled cleanup cron event as a safety net (in case
  *     deactivation was skipped).
@@ -21,10 +21,13 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 global $wpdb;
 
-// 1. Drop the custom carts table.
-$table_name = $wpdb->prefix . 'cartshare_carts';
+// 1. Drop the custom carts and events tables.
+$table_name   = $wpdb->prefix . 'cartshare_carts';
+$events_table = $wpdb->prefix . 'cartshare_events';
 // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name uses $wpdb->prefix, safe.
 $wpdb->query( "DROP TABLE IF EXISTS {$table_name}" );
+// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name uses $wpdb->prefix, safe.
+$wpdb->query( "DROP TABLE IF EXISTS {$events_table}" );
 
 // 2. Delete all options whose names start with 'cartshare_'.
 $wpdb->query(

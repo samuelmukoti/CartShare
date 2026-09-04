@@ -328,3 +328,106 @@ button.cartshare-delete-cart:focus {
 		grid-template-columns: 1fr;
 	}
 }
+
+/* ============================================================
+	Analytics dashboard
+	============================================================ */
+.cartshare-analytics .cartshare-range-filter {
+	margin: 12px 0 8px;
+}
+
+.cartshare-stat-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 16px;
+	margin: 16px 0 24px;
+}
+
+.cartshare-stat-card {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	padding: 18px 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.cartshare-stat-card--accent {
+	background: #f0f6fc;
+	border-color: #c5d9ed;
+}
+
+.cartshare-stat-value {
+	font-size: 28px;
+	font-weight: 600;
+	line-height: 1.1;
+	color: #1d2327;
+}
+
+.cartshare-stat-label {
+	font-size: 13px;
+	color: #50575e;
+}
+
+.cartshare-report-columns {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 24px;
+}
+
+.cartshare-report-card {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	padding: 8px 20px 20px;
+}
+
+.cartshare-report-card h2 {
+	font-size: 15px;
+}
+
+.cartshare-report-card .cartshare-num {
+	text-align: right;
+	white-space: nowrap;
+}
+
+.cartshare-bar-label {
+	display: inline-block;
+}
+
+.cartshare-bar {
+	display: block;
+	height: 6px;
+	margin-top: 6px;
+	border-radius: 3px;
+	background: #4f46e5;
+	min-width: 2px;
+}
+
+.cartshare-empty {
+	color: #646970;
+	font-style: italic;
+}
+
+.cartshare-analytics-note {
+	margin-top: 20px;
+	max-width: 720px;
+}
+
+/* Stack cards on narrow / mobile admin screens. */
+@media screen and (max-width: 960px) {
+	.cartshare-stat-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.cartshare-report-columns {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.cartshare-stat-grid {
+		grid-template-columns: 1fr;
+	}
+}

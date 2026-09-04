@@ -5,9 +5,9 @@ name: Quality Security
 
 on:
   push:
-    branches: [001-cart-share-analytics-dashboard]
+    branches: [main]
   pull_request:
-    branches: [001-cart-share-analytics-dashboard]
+    branches: [main]
 
 permissions:
   contents: read

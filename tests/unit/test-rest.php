@@ -51,6 +51,13 @@ class Stub_CartShare_DB_REST extends CartShare_DB {
 	public $token = 'aabbccdd11223344aabbccdd11223344';
 
 	/**
+	 * Simulated AUTO_INCREMENT counter for $wpdb->insert_id.
+	 *
+	 * @var int
+	 */
+	private $auto_increment = 0;
+
+	/**
 	 * Record arguments and return the fixed token.
 	 *
 	 * @param array       $cart_data   Cart payload.
@@ -65,6 +72,12 @@ class Stub_CartShare_DB_REST extends CartShare_DB {
 		$this->last_cart_data = $cart_data;
 		$this->last_source    = $source;
 		$this->last_user_id   = $user_id;
+		// Keep $wpdb->insert_id in sync so CartShare_Analytics::record() (which
+		// reads it after $this->insert()) sees the id this stub "inserted".
+		if ( isset( $GLOBALS['wpdb'] ) && $GLOBALS['wpdb'] instanceof Stub_WPDB_Activator ) {
+			++$this->auto_increment;
+			$GLOBALS['wpdb']->insert_id = $this->auto_increment;
+		}
 		return $this->token;
 	}
 }
