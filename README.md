@@ -40,12 +40,16 @@ vendor/bin/phpunit
 
 ## Releasing
 
-Releases are tag-driven via `.github/workflows/release.yml`:
+Run the release script from an up-to-date, clean `main`:
 
-1. Bump the version in `cartshare.php` (header + `CARTSHARE_VERSION`), `readme.txt` (`Stable tag` + a `= X.Y.Z =` changelog entry), and `languages/cartshare.pot`; merge to `main`.
-2. Tag and push: `git tag -a v1.2.3 -m "v1.2.3" && git push origin v1.2.3`
+```bash
+bin/release.sh patch            # or: minor | major | 1.2.3 | 1.3.0-rc.1
+bin/release.sh minor --dry-run  # preview the file changes only
+```
 
-The workflow checks that the tag matches the plugin version, runs WPCS + PHPUnit, builds `cartshare-X.Y.Z.zip` (excluding everything in `.distignore`), and publishes a GitHub Release with the zip, a SHA-256 checksum, and the changelog entry. Tags with a suffix (e.g. `v1.2.3-rc.1`) are published as pre-releases.
+It bumps the version everywhere (`cartshare.php` header + `CARTSHARE_VERSION`, `readme.txt` `Stable tag`, the POT, the test bootstrap), adds a `readme.txt` changelog entry drafted from PRs merged since the last tag, runs WPCS + PHPUnit, opens a `release/vX.Y.Z` PR, waits for CI, merges it, then tags `vX.Y.Z` on `main`. Useful flags: `--edit` (tweak the changelog in `$EDITOR`), `--notes FILE`, `--upgrade-notice "text"`, `--no-merge` (stop at the PR), `-y` (no prompt). If anything fails before the push, local changes are rolled back.
+
+The pushed tag triggers `.github/workflows/release.yml`, which re-checks that the tag matches the plugin version, runs WPCS + PHPUnit, builds `cartshare-X.Y.Z.zip` (excluding everything in `.distignore`), and publishes a GitHub Release with the zip, a SHA-256 checksum, and the changelog entry. Tags with a suffix (e.g. `v1.2.3-rc.1`) are published as pre-releases.
 
 ## Project intent
 
