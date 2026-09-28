@@ -5,7 +5,7 @@ Requires at least: 6.2
 Tested up to: 6.7
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,13 @@ Cart data is stored as JSON in a `LONGTEXT` column in a custom database table (`
 7. The printable cart view.
 
 == Changelog ==
+
+= 1.0.1 =
+* Redesigned the shared-cart page: your store logo and brand colors, a preview of every product with current prices, and a clear summary before opening.
+* Shared links now say "Open Cart" instead of "Restore Cart".
+* Fixed the Save & Share button showing "&amp;" after saving a cart.
+* Fixed a crash when opening an expired or invalid share link.
+* Deleted or expired coupon codes in a shared cart no longer show WooCommerce errors; valid codes still apply.
 
 = 1.0.0 =
 * Initial public release.
