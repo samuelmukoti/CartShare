@@ -339,9 +339,9 @@ class CartShare_Frontend {
 			foreach ( $warnings as $warning ) {
 				wc_add_notice( esc_html( $warning ), 'notice' );
 			}
-			wc_add_notice( __( 'Cart restored successfully.', 'cartshare' ), 'success' );
+			wc_add_notice( __( 'Shared cart opened. Your items are ready.', 'cartshare' ), 'success' );
 		} else {
-			wc_add_notice( __( 'Cart data is invalid and could not be restored.', 'cartshare' ), 'error' );
+			wc_add_notice( __( 'This shared cart could not be opened.', 'cartshare' ), 'error' );
 		}
 
 		$redirect = get_option( 'cartshare_restore_redirect', 'cart' );

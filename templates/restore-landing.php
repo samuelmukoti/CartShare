@@ -32,7 +32,7 @@ $shop_url  = wc_get_page_permalink( 'shop' );
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="robots" content="noindex, nofollow">
-	<title><?php printf( /* translators: %s: site name */ esc_html__( 'Restore Cart - %s', 'cartshare' ), esc_html( $site_name ) ); ?></title>
+	<title><?php printf( /* translators: %s: site name */ esc_html__( 'Open Shared Cart - %s', 'cartshare' ), esc_html( $site_name ) ); ?></title>
 	<?php wp_head(); ?>
 	<style>
 		/*
@@ -396,7 +396,7 @@ $shop_url  = wc_get_page_permalink( 'shop' );
 					?>
 				</span>
 				<h1 class="csl-title"><?php esc_html_e( 'Someone shared a cart with you!', 'cartshare' ); ?></h1>
-				<p class="csl-lede"><?php esc_html_e( 'Everything they picked out is ready and waiting. Review the items below, then add them to your cart in one click.', 'cartshare' ); ?></p>
+				<p class="csl-lede"><?php esc_html_e( 'Everything they picked out is ready and waiting. Review the items below, then open the cart to start shopping.', 'cartshare' ); ?></p>
 				<?php if ( $cart_name ) : ?>
 					<p class="csl-cart-name">
 						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
@@ -540,7 +540,7 @@ $shop_url  = wc_get_page_permalink( 'shop' );
 							<strong><?php esc_html_e( 'Heads up!', 'cartshare' ); ?></strong>
 							<?php
 							/* translators: %d: number of items currently in the visitor's cart */
-							printf( esc_html( _n( 'You have %d item in your cart. Restoring this shared cart will replace it.', 'You have %d items in your cart. Restoring this shared cart will replace them.', $current_count, 'cartshare' ) ), (int) $current_count );
+							printf( esc_html( _n( 'You have %d item in your cart. Opening this shared cart will replace it.', 'You have %d items in your cart. Opening this shared cart will replace them.', $current_count, 'cartshare' ) ), (int) $current_count );
 							?>
 						</div>
 					</div>
@@ -555,9 +555,9 @@ $shop_url  = wc_get_page_permalink( 'shop' );
 							<span>
 								<?php
 								if ( $is_non_empty ) {
-									esc_html_e( 'Replace My Cart & Restore', 'cartshare' );
+									esc_html_e( 'Open Cart & Replace Mine', 'cartshare' );
 								} else {
-									esc_html_e( 'Add to My Cart', 'cartshare' );
+									esc_html_e( 'Open Cart', 'cartshare' );
 								}
 								?>
 							</span>
