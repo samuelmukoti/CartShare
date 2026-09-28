@@ -2,7 +2,7 @@
 Contributors: Samuel Mukoti <sam@melivo.com>
 Tags: woocommerce, cart, share, save cart, share cart
 Requires at least: 6.2
-Tested up to: 6.7
+Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
 Stable tag: 1.0.1
@@ -122,6 +122,12 @@ Cart data is stored as JSON in a `LONGTEXT` column in a custom database table (`
 7. The printable cart view.
 
 == Changelog ==
+
+= Unreleased =
+* Tested with WordPress 7.1 and WooCommerce 11.1 (and the declared minimums: WordPress 6.2, WooCommerce 8.2, PHP 7.4).
+* Fix: the Save & Share button was registered twice in the Cart/Checkout blocks, logging a "Plugin already registered" console error.
+* Fix: WooCommerce 11 dependency warning — `popup.js` no longer touches `wc.blocksCheckout`; the blocks button is owned by `block-cart.js` alone, which is now also registered for the Checkout block.
+* The block button no longer risks crashing the Cart block if WooCommerce renames its order-meta slot.
 
 = 1.0.1 =
 * Redesigned the shared-cart page: your store logo and brand colors, a preview of every product with current prices, and a clear summary before opening.

@@ -39,13 +39,28 @@ if ( $wp_tests_dir ) {
     // Point WordPress test suite at the plugin.
     define( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH', dirname( __DIR__ ) . '/vendor/yoast/phpunit-polyfills' );
 
+    // Load WooCommerce and the plugin on muplugins_loaded — i.e. before
+    // plugins_loaded fires — so CartShare boots exactly as it does in production.
+    // Requiring them after the WP bootstrap would miss plugins_loaded entirely.
+    require_once rtrim( $wp_tests_dir, '/' ) . '/includes/functions.php';
+
+    tests_add_filter(
+        'muplugins_loaded',
+        function () {
+            require_once WP_CONTENT_DIR . '/plugins/woocommerce/woocommerce.php';
+            require_once dirname( __DIR__ ) . '/cartshare.php';
+        }
+    );
+
+    // Create WooCommerce's tables in the test DB.
+    tests_add_filter(
+        'setup_theme',
+        function () {
+            WC_Install::install();
+        }
+    );
+
     require_once $wp_tests_bootstrap;
-
-    // Activate WooCommerce dependency for integration tests.
-    require_once WP_CONTENT_DIR . '/plugins/woocommerce/woocommerce.php';
-
-    // Load the plugin itself.
-    require_once dirname( __DIR__ ) . '/cartshare.php';
 
     return; // Integration bootstrap complete — skip unit stubs below.
 }

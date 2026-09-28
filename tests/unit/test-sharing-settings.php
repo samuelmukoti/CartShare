@@ -73,7 +73,9 @@ class Test_CartShare_Sharing_Settings extends TestCase {
 
 		$frontend = new CartShare_Frontend();
 		$method   = new ReflectionMethod( CartShare_Frontend::class, 'get_script_data' );
-		$method->setAccessible( true );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$method->setAccessible( true ); // No-op since PHP 8.1, deprecated in 8.5.
+		}
 
 		$data = $method->invoke( $frontend );
 
@@ -91,7 +93,9 @@ class Test_CartShare_Sharing_Settings extends TestCase {
 
 		$frontend = new CartShare_Frontend();
 		$method   = new ReflectionMethod( CartShare_Frontend::class, 'get_script_data' );
-		$method->setAccessible( true );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$method->setAccessible( true ); // No-op since PHP 8.1, deprecated in 8.5.
+		}
 
 		$data = $method->invoke( $frontend );
 
@@ -113,7 +117,9 @@ class Test_CartShare_Sharing_Settings extends TestCase {
 
 		$frontend = new CartShare_Frontend();
 		$method   = new ReflectionMethod( CartShare_Frontend::class, 'get_enabled_channels' );
-		$method->setAccessible( true );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$method->setAccessible( true ); // No-op since PHP 8.1, deprecated in 8.5.
+		}
 
 		$channels = $method->invoke( $frontend );
 

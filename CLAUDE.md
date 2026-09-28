@@ -14,6 +14,7 @@ CartShare ("Save & Share Cart") is a WooCommerce plugin that persists carts and 
 - Run all tests: `vendor/bin/phpunit`
 - Run only unit tests (no WP install needed): `vendor/bin/phpunit --testsuite unit`
 - Run only integration tests (requires `WP_TESTS_DIR` pointing at the WordPress test library + WooCommerce): `WP_TESTS_DIR=/path/to/wp-tests vendor/bin/phpunit --testsuite integration`
+- Set up the integration environment (WP core + test library + WooCommerce into `/tmp`, no svn needed): `bin/install-wp-tests.sh <db> <user> <pass> <host:port> [wp-version|latest] [wc-version|latest]`, then use `WP_TESTS_DIR=/tmp/wordpress-tests-lib`. WooCommerce ≥ 11 requires WP 7.0, so pair WP 6.2 with WC `8.2.0`.
 - Run a single test file: `vendor/bin/phpunit tests/unit/test-token.php`
 - Run a single test method: `vendor/bin/phpunit --filter test_method_name tests/unit/test-token.php`
 - Lint (WPCS): `vendor/bin/phpcs --standard=WordPress --extensions=php --ignore=vendor/,node_modules/ .`
