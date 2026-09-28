@@ -318,7 +318,9 @@ class CartShare_Frontend {
 			),
 			'colors'       => $this->get_color_vars(),
 			'buttonLabel'  => esc_html( get_option( 'cartshare_button_label', __( 'Save & Share Cart', 'cartshare' ) ) ),
-			'shareMessage' => esc_html( get_option( 'cartshare_share_message', '' ) ),
+			// wp_localize_script() JSON-encodes this value; HTML escaping here would
+			// turn characters such as '&' into '&amp;' in the shared message.
+			'shareMessage' => (string) get_option( 'cartshare_share_message', '' ),
 		);
 	}
 

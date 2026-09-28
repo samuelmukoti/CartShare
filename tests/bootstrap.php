@@ -452,6 +452,91 @@ if ( ! function_exists( 'get_option' ) ) {
 	}
 }
 
+if ( ! function_exists( 'rest_url' ) ) {
+	/**
+	 * Stub: returns a deterministic REST API base URL.
+	 *
+	 * @param string $path REST path.
+	 * @return string
+	 */
+	function rest_url( $path = '' ) {
+		return 'http://example.org/wp-json/' . ltrim( $path, '/' );
+	}
+}
+
+if ( ! function_exists( 'wp_create_nonce' ) ) {
+	/**
+	 * Stub: returns a deterministic nonce.
+	 *
+	 * @param string $action Nonce action.
+	 * @return string
+	 */
+	function wp_create_nonce( $action = -1 ) {
+		return 'test-nonce-' . $action;
+	}
+}
+
+if ( ! function_exists( 'home_url' ) ) {
+	/**
+	 * Stub: returns a deterministic site URL.
+	 *
+	 * @param string $path Optional path.
+	 * @return string
+	 */
+	function home_url( $path = '' ) {
+		return 'http://example.org/' . ltrim( $path, '/' );
+	}
+}
+
+if ( ! function_exists( 'esc_html__' ) ) {
+	/**
+	 * Stub: returns untranslated text.
+	 *
+	 * @param string $text Text.
+	 * @param string $domain Translation domain.
+	 * @return string
+	 */
+	function esc_html__( $text, $domain = 'default' ) {
+		return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' );
+	}
+}
+
+if ( ! function_exists( 'esc_html' ) ) {
+	/**
+	 * Stub: escapes HTML text.
+	 *
+	 * @param string $text Text.
+	 * @return string
+	 */
+	function esc_html( $text ) {
+		return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' );
+	}
+}
+
+if ( ! function_exists( 'esc_url' ) ) {
+	/**
+	 * Stub: returns the supplied URL.
+	 *
+	 * @param string $url URL.
+	 * @return string
+	 */
+	function esc_url( $url ) {
+		return $url;
+	}
+}
+
+if ( ! function_exists( 'sanitize_hex_color' ) ) {
+	/**
+	 * Stub: returns valid hexadecimal colors unchanged.
+	 *
+	 * @param string $color Color value.
+	 * @return string|null
+	 */
+	function sanitize_hex_color( $color ) {
+		return preg_match( '/^#[a-f0-9]{6}$/i', (string) $color ) ? $color : null;
+	}
+}
+
 if ( ! function_exists( 'absint' ) ) {
 	/**
 	 * Stub: converts a value to a non-negative integer.

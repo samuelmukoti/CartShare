@@ -64,6 +64,23 @@ class Test_CartShare_Sharing_Settings extends TestCase {
 	}
 
 	/**
+	 * Localized share messages must preserve user-visible punctuation.
+	 *
+	 * @return void
+	 */
+	public function test_script_data_preserves_share_message_entities() {
+		update_option( 'cartshare_share_message', 'Tom & Jerry' );
+
+		$frontend = new CartShare_Frontend();
+		$method   = new ReflectionMethod( CartShare_Frontend::class, 'get_script_data' );
+		$method->setAccessible( true );
+
+		$data = $method->invoke( $frontend );
+
+		$this->assertSame( 'Tom & Jerry', $data['shareMessage'] );
+	}
+
+	/**
 	 * When whatsapp is disabled via its option, get_enabled_channels() must
 	 * exclude it from the returned array.
 	 *
