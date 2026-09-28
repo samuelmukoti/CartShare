@@ -21,6 +21,9 @@ class Stub_WC_Cart_Restore {
 	/** @var array coupon code => bool return value for apply_coupon() */
 	public $coupon_results = array();
 
+	/** @var string[] Codes passed to apply_coupon(), in order. */
+	public $applied_codes = array();
+
 	/** @var bool Whether empty_cart() has been called. */
 	public $emptied = false;
 
@@ -84,6 +87,7 @@ class Stub_WC_Cart_Restore {
 	 * @return bool
 	 */
 	public function apply_coupon( $code ) {
+		$this->applied_codes[] = $code;
 		if ( array_key_exists( $code, $this->coupon_results ) ) {
 			return $this->coupon_results[ $code ];
 		}
@@ -109,6 +113,7 @@ class Test_CartShare_Cart_Restore extends TestCase {
 	 */
 	protected function setUp(): void {
 		parent::setUp();
+		CartShare_Test_State::reset();
 		$GLOBALS['cartshare_wc_instance'] = new CartShare_Stub_WC();
 		$this->cart_stub                  = new Stub_WC_Cart_Restore();
 		WC()->cart                        = $this->cart_stub;
@@ -169,6 +174,7 @@ class Test_CartShare_Cart_Restore extends TestCase {
 	 * A valid coupon must be applied without producing any warning.
 	 */
 	public function test_restore_applies_valid_coupon_without_warning() {
+		CartShare_Test_State::$coupons   = array( 'save10' => array( 'id' => 1 ) );
 		$this->cart_stub->coupon_results = array( 'SAVE10' => true );
 
 		$cart_data = array(
@@ -182,10 +188,11 @@ class Test_CartShare_Cart_Restore extends TestCase {
 	}
 
 	/**
-	 * An expired coupon (apply_coupon returns false) must produce one warning
-	 * that mentions the coupon code.
+	 * A coupon that passes validation but still fails to apply must produce
+	 * one warning that mentions the coupon code.
 	 */
 	public function test_restore_returns_warning_for_invalid_coupon() {
+		CartShare_Test_State::$coupons   = array( 'expired' => array( 'id' => 2 ) );
 		$this->cart_stub->coupon_results = array( 'EXPIRED' => false );
 
 		$cart_data = array(
@@ -197,5 +204,47 @@ class Test_CartShare_Cart_Restore extends TestCase {
 
 		$this->assertCount( 1, $warnings );
 		$this->assertStringContainsString( 'EXPIRED', $warnings[0] );
+	}
+
+	/**
+	 * A coupon that no longer exists must not be passed to apply_coupon()
+	 * (which would add WooCommerce's own error notice), and must produce
+	 * exactly one CartShare warning.
+	 */
+	public function test_restore_skips_missing_coupon_without_applying_it() {
+		$warnings = $this->make_cart()->restore(
+			array(
+				'items'   => array(),
+				'coupons' => array( 'GONE10' ),
+			)
+		);
+
+		$this->assertSame( array(), $this->cart_stub->applied_codes );
+		$this->assertCount( 1, $warnings );
+		$this->assertStringContainsString( 'GONE10', $warnings[0] );
+	}
+
+	/**
+	 * Expired coupons are skipped; valid ones in the same cart still apply.
+	 */
+	public function test_restore_skips_expired_coupon_but_applies_valid_one() {
+		CartShare_Test_State::$coupons = array(
+			'old5'     => array(
+				'id'      => 3,
+				'expires' => time() - DAY_IN_SECONDS,
+			),
+			'spring15' => array( 'id' => 4 ),
+		);
+
+		$warnings = $this->make_cart()->restore(
+			array(
+				'items'   => array(),
+				'coupons' => array( 'OLD5', 'spring15' ),
+			)
+		);
+
+		$this->assertSame( array( 'spring15' ), $this->cart_stub->applied_codes );
+		$this->assertCount( 1, $warnings );
+		$this->assertStringContainsString( 'OLD5', $warnings[0] );
 	}
 }

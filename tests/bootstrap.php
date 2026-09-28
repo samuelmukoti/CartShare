@@ -1023,28 +1023,68 @@ if ( ! function_exists( 'wc_get_coupon_id_by_code' ) ) {
 
 if ( ! class_exists( 'WC_Coupon' ) ) {
 	/**
-	 * Minimal WC_Coupon stand-in exposing get_date_expires().
+	 * Minimal WC_Coupon stand-in backed by CartShare_Test_State::$coupons.
 	 */
 	class WC_Coupon {
+		/** @var int Coupon ID (0 when the coupon does not exist). */
+		private $id = 0;
 		/** @var int|null Expiry timestamp. */
 		private $expires = null;
 
 		/**
 		 * Constructor.
 		 *
-		 * @param int $id Coupon ID.
+		 * @param int|string $id_or_code Coupon ID or code, like the real class.
 		 */
-		public function __construct( $id ) {
-			foreach ( CartShare_Test_State::$coupons as $coupon ) {
-				if ( $coupon['id'] === $id ) {
+		public function __construct( $id_or_code ) {
+			foreach ( CartShare_Test_State::$coupons as $code => $coupon ) {
+				if ( $coupon['id'] === $id_or_code || ( is_string( $id_or_code ) && strtolower( $id_or_code ) === $code ) ) {
+					$this->id      = $coupon['id'];
 					$this->expires = $coupon['expires'] ?? null;
 				}
 			}
 		}
 
+		/** @return int */
+		public function get_id() {
+			return $this->id;
+		}
+
 		/** @return DateTime|null */
 		public function get_date_expires() {
 			return null === $this->expires ? null : ( new DateTime() )->setTimestamp( $this->expires );
+		}
+	}
+}
+
+if ( ! class_exists( 'WC_Discounts' ) ) {
+	/**
+	 * Minimal WC_Discounts stand-in: a coupon is valid when it exists and
+	 * has not expired.
+	 */
+	class WC_Discounts {
+		/**
+		 * Constructor.
+		 *
+		 * @param mixed $cart Cart object (unused).
+		 */
+		public function __construct( $cart = null ) {}
+
+		/**
+		 * Validate a coupon.
+		 *
+		 * @param WC_Coupon $coupon Coupon.
+		 * @return true|WP_Error
+		 */
+		public function is_coupon_valid( $coupon ) {
+			if ( ! $coupon->get_id() ) {
+				return new WP_Error( 'invalid_coupon', 'Coupon does not exist.' );
+			}
+			$expires = $coupon->get_date_expires();
+			if ( $expires && $expires->getTimestamp() < time() ) {
+				return new WP_Error( 'invalid_coupon', 'Coupon has expired.' );
+			}
+			return true;
 		}
 	}
 }
