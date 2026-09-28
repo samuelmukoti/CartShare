@@ -82,7 +82,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Plugin constants (normally set by cartshare.php after WordPress loads).
 if ( ! defined( 'CARTSHARE_VERSION' ) ) {
-    define( 'CARTSHARE_VERSION', '1.0.1' );
+    define( 'CARTSHARE_VERSION', '1.0.2' );
 }
 if ( ! defined( 'CARTSHARE_PATH' ) ) {
     define( 'CARTSHARE_PATH', dirname( __DIR__ ) . '/' );
