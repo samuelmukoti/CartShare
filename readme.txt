@@ -5,7 +5,7 @@ Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,12 @@ Cart data is stored as JSON in a `LONGTEXT` column in a custom database table (`
 7. The printable cart view.
 
 == Changelog ==
+
+= 1.0.2 =
+* Tested with WordPress 7.1 and WooCommerce 11.1 (minimums: WordPress 6.2, WooCommerce 8.2, PHP 7.4).
+* The share popup now shows the share link and sharing buttons only after the cart is saved, instead of an empty link field up front.
+* Fixed a duplicate Save & Share button registration in the block Cart and Checkout that logged console errors on WooCommerce 11.
+* The Save & Share button in the block Cart and Checkout can no longer break the block if WooCommerce changes its order-summary slot.
 
 = 1.0.1 =
 * Redesigned the shared-cart page: your store logo and brand colors, a preview of every product with current prices, and a clear summary before opening.
