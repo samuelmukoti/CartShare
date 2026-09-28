@@ -11,6 +11,8 @@
  * Requires Plugins: woocommerce
  * Requires PHP: 7.4
  * Requires at least: 6.2
+ * WC requires at least: 8.2
+ * WC tested up to: 11.1
  * Text Domain: cartshare
  * Domain Path: /languages
  *

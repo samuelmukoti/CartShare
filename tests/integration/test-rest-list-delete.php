@@ -189,6 +189,7 @@ class Test_CartShare_REST_ListDelete extends WP_UnitTestCase {
 		wp_set_current_user( $user_id );
 
 		$request  = new WP_REST_Request( 'DELETE', '/cartshare/v1/delete/' . $token );
+		$request->add_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 200, $response->get_status() );
@@ -222,6 +223,7 @@ class Test_CartShare_REST_ListDelete extends WP_UnitTestCase {
 		wp_set_current_user( $user_a_id );
 
 		$request  = new WP_REST_Request( 'DELETE', '/cartshare/v1/delete/' . $token );
+		$request->add_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 403, $response->get_status() );

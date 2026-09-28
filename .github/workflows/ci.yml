@@ -17,6 +17,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ["8.3", "8.5"]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,7 +28,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.3"
+          php-version: ${{ matrix.php }}
           tools: composer, phpcs
 
       - name: Install deps
@@ -40,3 +44,47 @@ jobs:
       - name: Test
         if: hashFiles('phpunit.xml*') != ''
         run: vendor/bin/phpunit
+
+  # Runs the integration suite against real WordPress + WooCommerce: the latest
+  # releases, and the oldest combination the plugin claims to support
+  # (WooCommerce 8.2.x is the last release that runs on WordPress 6.2).
+  integration:
+    name: integration (WP ${{ matrix.wp }}, WC ${{ matrix.wc }}, PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { wp: latest, wc: latest, php: "8.3" }
+          - { wp: "6.2", wc: "8.2.0", php: "7.4" }
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mysqli
+          tools: composer
+
+      - name: Install deps
+        run: composer install --no-progress --no-interaction
+
+      - name: Install WordPress test library + WooCommerce
+        run: bin/install-wp-tests.sh wordpress_test root root 127.0.0.1:3306 ${{ matrix.wp }} ${{ matrix.wc }}
+
+      - name: Integration tests
+        run: WP_TESTS_DIR=/tmp/wordpress-tests-lib vendor/bin/phpunit --testsuite integration

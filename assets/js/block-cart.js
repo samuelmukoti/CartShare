@@ -17,8 +17,15 @@
 	}
 
 	var registerPlugin    = wp.plugins.registerPlugin;
-	var ExperimentalOrderMeta = wc.blocksCheckout.ExperimentalOrderMeta;
+	// Prefer the experimental slot (current WooCommerce); fall back to a
+	// stable export if it is ever promoted. Bail rather than render an
+	// undefined component, which would crash the whole Cart block.
+	var ExperimentalOrderMeta = wc.blocksCheckout.ExperimentalOrderMeta || wc.blocksCheckout.OrderMeta;
 	var el                = wp.element.createElement;
+
+	if ( ! registerPlugin || ! ExperimentalOrderMeta ) {
+		return;
+	}
 
 	var buttonLabel = ( window.CartShareData && window.CartShareData.buttonLabel )
 		? window.CartShareData.buttonLabel

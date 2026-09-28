@@ -570,58 +570,12 @@
 	}
 
 	/* ------------------------------------------------------------------
-	   Block-cart button (no JSX / no build step)
-	------------------------------------------------------------------ */
-	function initBlockCart() {
-		if (
-			! window.wp ||
-			! window.wp.plugins ||
-			! window.wp.element ||
-			! window.wc ||
-			! window.wc.blocksCheckout
-		) {
-			return;
-		}
-
-		var registerPlugin       = window.wp.plugins.registerPlugin;
-		var ExperimentalOrderMeta = window.wc.blocksCheckout.ExperimentalOrderMeta;
-		var el                   = window.wp.element.createElement;
-
-		if ( ! registerPlugin || ! ExperimentalOrderMeta ) {
-			return;
-		}
-
-		registerPlugin( 'cartshare-save-share', {
-			scope: 'woocommerce-checkout',
-			render: function () {
-				return el(
-					ExperimentalOrderMeta,
-					{},
-					el(
-						'button',
-						{
-							type:      'button',
-							className: 'cartshare-open button alt',
-							onClick:   openPopup,
-						},
-						( data.buttonLabel ) || 'Save & Share Cart'
-					)
-				);
-			},
-		} );
-	}
-
-	/* ------------------------------------------------------------------
 	   Boot
 	------------------------------------------------------------------ */
 	if ( document.readyState === 'loading' ) {
-		document.addEventListener( 'DOMContentLoaded', function () {
-			init();
-			initBlockCart();
-		} );
+		document.addEventListener( 'DOMContentLoaded', init );
 	} else {
 		init();
-		initBlockCart();
 	}
 
 	// Expose openPopup globally so the block-cart button and other JS can call it.

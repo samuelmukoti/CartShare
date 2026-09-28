@@ -47,6 +47,7 @@ class CartShare_Frontend {
 		add_action( 'woocommerce_after_cart_totals', array( $this, 'render_button' ) );
 		add_action( 'wp_footer', array( $this, 'render_popup' ) );
 		add_action( 'woocommerce_blocks_cart_block_registration', array( $this, 'register_blocks_integration' ) );
+		add_action( 'woocommerce_blocks_checkout_block_registration', array( $this, 'register_blocks_integration' ) );
 
 		// Print-cart front controller: register the query var and intercept early.
 		add_filter( 'query_vars', array( $this, 'add_print_query_var' ) );
@@ -353,9 +354,9 @@ class CartShare_Frontend {
 	/**
 	 * Register the CartShare blocks integration with WooCommerce Blocks.
 	 *
-	 * Injects the Save & Share button into the block-based Cart without
-	 * requiring a build step, using ExperimentalOrderMeta slot and
-	 * wp.element.createElement.
+	 * Injects the Save & Share button into the block-based Cart and Checkout
+	 * without requiring a build step, using ExperimentalOrderMeta slot and
+	 * wp.element.createElement. Hooked to both block registries.
 	 *
 	 * @param \Automattic\WooCommerce\Blocks\Integrations\IntegrationRegistry $registry WooCommerce Blocks integration registry.
 	 * @return void
