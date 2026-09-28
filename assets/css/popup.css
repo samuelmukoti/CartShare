@@ -18,6 +18,16 @@
 }
 
 /* =========================================================
+   Honour the `hidden` attribute inside the popup. Component rules
+   (e.g. display:flex on the share-link row and channel buttons) and
+   theme button styles would otherwise override the browser's
+   display:none, showing controls popup.js means to reveal later.
+   ========================================================= */
+#cartshare-popup [hidden] {
+	display: none !important;
+}
+
+/* =========================================================
    Trigger button (below cart totals)
    ========================================================= */
 .cartshare-button-wrap {

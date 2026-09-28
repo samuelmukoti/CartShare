@@ -128,6 +128,7 @@ Cart data is stored as JSON in a `LONGTEXT` column in a custom database table (`
 * Fix: the Save & Share button was registered twice in the Cart/Checkout blocks, logging a "Plugin already registered" console error.
 * Fix: WooCommerce 11 dependency warning — `popup.js` no longer touches `wc.blocksCheckout`; the blocks button is owned by `block-cart.js` alone, which is now also registered for the Checkout block.
 * The block button no longer risks crashing the Cart block if WooCommerce renames its order-meta slot.
+* Fix: the share popup showed an empty link field and all share buttons before the cart was saved; they now appear only after saving.
 
 = 1.0.1 =
 * Redesigned the shared-cart page: your store logo and brand colors, a preview of every product with current prices, and a clear summary before opening.
