@@ -17,6 +17,7 @@
 node_modules
 vendor
 tests
+bin
 wp-admin
 AGENTS.md
 CLAUDE.md
