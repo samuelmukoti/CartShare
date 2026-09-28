@@ -270,6 +270,16 @@ if ( ! class_exists( 'CartShare_Test_State' ) ) {
 		public static $enqueued_scripts = array();
 		/** @var string[] Style handles passed to wp_enqueue_style(). */
 		public static $enqueued_styles = array();
+		/** @var array Key/value store for get_theme_mod(). */
+		public static $theme_mods = array();
+		/** @var string[] Attachment ID => URL for wp_get_attachment_image_url(). */
+		public static $attachment_urls = array();
+		/** @var string Return value for get_site_icon_url(). */
+		public static $site_icon_url = '';
+		/** @var CartShare_Stub_Product[] Product ID => product for wc_get_product(). */
+		public static $products = array();
+		/** @var array Coupon code => [ 'id' => int, 'expires' => int|null ] for coupon stubs. */
+		public static $coupons = array();
 
 		/**
 		 * Reset all state to empty arrays (call in setUp / tearDown).
@@ -286,6 +296,11 @@ if ( ! class_exists( 'CartShare_Test_State' ) ) {
 			self::$json_success_calls = array();
 			self::$enqueued_scripts  = array();
 			self::$enqueued_styles   = array();
+			self::$theme_mods        = array();
+			self::$attachment_urls   = array();
+			self::$site_icon_url     = '';
+			self::$products          = array();
+			self::$coupons           = array();
 		}
 	}
 }
@@ -845,6 +860,233 @@ if ( ! function_exists( 'is_account_page' ) ) {
     function is_account_page() {
         return false;
     }
+}
+
+// ------------------------------------------------------------------
+// Branding + restore-preview stubs (theme logo, products, coupons).
+// ------------------------------------------------------------------
+if ( ! function_exists( 'get_theme_mod' ) ) {
+	/**
+	 * Stub: reads from CartShare_Test_State::$theme_mods.
+	 *
+	 * @param string $name    Theme mod name.
+	 * @param mixed  $default Default value.
+	 * @return mixed
+	 */
+	function get_theme_mod( $name, $default = false ) {
+		return CartShare_Test_State::$theme_mods[ $name ] ?? $default;
+	}
+}
+
+if ( ! function_exists( 'wp_get_attachment_image_url' ) ) {
+	/**
+	 * Stub: reads from CartShare_Test_State::$attachment_urls.
+	 *
+	 * @param int    $id   Attachment ID.
+	 * @param string $size Image size.
+	 * @return string|false
+	 */
+	function wp_get_attachment_image_url( $id, $size = 'thumbnail' ) {
+		return CartShare_Test_State::$attachment_urls[ $id ] ?? false;
+	}
+}
+
+if ( ! function_exists( 'get_site_icon_url' ) ) {
+	/**
+	 * Stub: returns CartShare_Test_State::$site_icon_url.
+	 *
+	 * @param int $size Icon size.
+	 * @return string
+	 */
+	function get_site_icon_url( $size = 512 ) {
+		return CartShare_Test_State::$site_icon_url;
+	}
+}
+
+if ( ! function_exists( 'get_bloginfo' ) ) {
+	/**
+	 * Stub: returns a fixed site name.
+	 *
+	 * @param string $show Field to show.
+	 * @return string
+	 */
+	function get_bloginfo( $show = '' ) {
+		return 'Test Store';
+	}
+}
+
+if ( ! class_exists( 'CartShare_Stub_Product' ) ) {
+	/**
+	 * Minimal WC_Product stand-in for build_restore_preview() tests.
+	 */
+	class CartShare_Stub_Product {
+		/** @var array Product properties. */
+		public $props;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param array $props name, price, regular_price, on_sale, purchasable, in_stock.
+		 */
+		public function __construct( array $props ) {
+			$this->props = array_merge(
+				array(
+					'name'          => 'Product',
+					'price'         => 10.0,
+					'regular_price' => 10.0,
+					'on_sale'       => false,
+					'purchasable'   => true,
+					'in_stock'      => true,
+				),
+				$props
+			);
+		}
+
+		/** @return string */
+		public function get_name() {
+			return $this->props['name'];
+		}
+
+		/** @return float */
+		public function get_price() {
+			return $this->props['price'];
+		}
+
+		/** @return float */
+		public function get_regular_price() {
+			return $this->props['regular_price'];
+		}
+
+		/** @return bool */
+		public function is_on_sale() {
+			return $this->props['on_sale'];
+		}
+
+		/** @return bool */
+		public function is_purchasable() {
+			return $this->props['purchasable'];
+		}
+
+		/** @return bool */
+		public function is_in_stock() {
+			return $this->props['in_stock'];
+		}
+
+		/** @return string */
+		public function get_image() {
+			return '<img src="img.png" alt="">';
+		}
+
+		/** @return string */
+		public function get_permalink() {
+			return 'http://example.org/product/';
+		}
+	}
+}
+
+if ( ! function_exists( 'wc_get_product' ) ) {
+	/**
+	 * Stub: reads from CartShare_Test_State::$products.
+	 *
+	 * @param int $id Product ID.
+	 * @return CartShare_Stub_Product|false
+	 */
+	function wc_get_product( $id ) {
+		return CartShare_Test_State::$products[ $id ] ?? false;
+	}
+}
+
+if ( ! function_exists( 'wc_get_price_to_display' ) ) {
+	/**
+	 * Stub: returns the explicit price arg or the product's price.
+	 *
+	 * @param CartShare_Stub_Product $product Product.
+	 * @param array                  $args    Optional [ 'price' => float ].
+	 * @return float
+	 */
+	function wc_get_price_to_display( $product, $args = array() ) {
+		return (float) ( $args['price'] ?? $product->get_price() );
+	}
+}
+
+if ( ! function_exists( 'wc_get_coupon_id_by_code' ) ) {
+	/**
+	 * Stub: reads from CartShare_Test_State::$coupons.
+	 *
+	 * @param string $code Coupon code.
+	 * @return int
+	 */
+	function wc_get_coupon_id_by_code( $code ) {
+		return CartShare_Test_State::$coupons[ strtolower( $code ) ]['id'] ?? 0;
+	}
+}
+
+if ( ! class_exists( 'WC_Coupon' ) ) {
+	/**
+	 * Minimal WC_Coupon stand-in backed by CartShare_Test_State::$coupons.
+	 */
+	class WC_Coupon {
+		/** @var int Coupon ID (0 when the coupon does not exist). */
+		private $id = 0;
+		/** @var int|null Expiry timestamp. */
+		private $expires = null;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param int|string $id_or_code Coupon ID or code, like the real class.
+		 */
+		public function __construct( $id_or_code ) {
+			foreach ( CartShare_Test_State::$coupons as $code => $coupon ) {
+				if ( $coupon['id'] === $id_or_code || ( is_string( $id_or_code ) && strtolower( $id_or_code ) === $code ) ) {
+					$this->id      = $coupon['id'];
+					$this->expires = $coupon['expires'] ?? null;
+				}
+			}
+		}
+
+		/** @return int */
+		public function get_id() {
+			return $this->id;
+		}
+
+		/** @return DateTime|null */
+		public function get_date_expires() {
+			return null === $this->expires ? null : ( new DateTime() )->setTimestamp( $this->expires );
+		}
+	}
+}
+
+if ( ! class_exists( 'WC_Discounts' ) ) {
+	/**
+	 * Minimal WC_Discounts stand-in: a coupon is valid when it exists and
+	 * has not expired.
+	 */
+	class WC_Discounts {
+		/**
+		 * Constructor.
+		 *
+		 * @param mixed $cart Cart object (unused).
+		 */
+		public function __construct( $cart = null ) {}
+
+		/**
+		 * Validate a coupon.
+		 *
+		 * @param WC_Coupon $coupon Coupon.
+		 * @return true|WP_Error
+		 */
+		public function is_coupon_valid( $coupon ) {
+			if ( ! $coupon->get_id() ) {
+				return new WP_Error( 'invalid_coupon', 'Coupon does not exist.' );
+			}
+			$expires = $coupon->get_date_expires();
+			if ( $expires && $expires->getTimestamp() < time() ) {
+				return new WP_Error( 'invalid_coupon', 'Coupon has expired.' );
+			}
+			return true;
+		}
+	}
 }
 
 // ------------------------------------------------------------------

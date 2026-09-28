@@ -159,8 +159,12 @@ class CartShare_Cart {
 		}
 
 		foreach ( $coupons as $code ) {
-			$code    = sanitize_text_field( (string) $code );
-			$applied = WC()->cart->apply_coupon( $code );
+			$code = sanitize_text_field( (string) $code );
+
+			// Validate first: apply_coupon() adds its own WooCommerce error
+			// notice for a missing/expired code, which would duplicate ours.
+			$valid   = ( new WC_Discounts( WC()->cart ) )->is_coupon_valid( new WC_Coupon( $code ) );
+			$applied = true === $valid && WC()->cart->apply_coupon( $code );
 
 			if ( ! $applied ) {
 				$warnings[] = sprintf(

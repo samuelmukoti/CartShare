@@ -81,6 +81,25 @@ class Test_CartShare_Sharing_Settings extends TestCase {
 	}
 
 	/**
+	 * Localized labels are set via textContent in JS, so they must not be
+	 * HTML-escaped in PHP ("Save &amp; Share Cart" would render literally).
+	 *
+	 * @return void
+	 */
+	public function test_script_data_labels_are_not_html_escaped() {
+		update_option( 'cartshare_button_label', 'Save & Share' );
+
+		$frontend = new CartShare_Frontend();
+		$method   = new ReflectionMethod( CartShare_Frontend::class, 'get_script_data' );
+		$method->setAccessible( true );
+
+		$data = $method->invoke( $frontend );
+
+		$this->assertSame( 'Save & Share Cart', $data['labels']['save'] );
+		$this->assertSame( 'Save & Share', $data['buttonLabel'] );
+	}
+
+	/**
 	 * When whatsapp is disabled via its option, get_enabled_channels() must
 	 * exclude it from the returned array.
 	 *
