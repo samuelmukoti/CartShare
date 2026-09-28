@@ -1,0 +1,30 @@
+# Files and directories excluded from the distributable plugin zip.
+# Used by .github/workflows/release.yml (rsync --exclude-from).
+.git
+.github
+.claude
+.devstation
+.planning
+.distignore
+.gitignore
+.dockerignore
+.pre-commit-config.yaml
+.phpunit.result.cache
+.claude_settings.json
+.devstation-security.json
+.env
+.env.*
+node_modules
+vendor
+tests
+wp-admin
+AGENTS.md
+CLAUDE.md
+PRD.md
+README.md
+composer.json
+composer.lock
+phpcs.xml
+phpunit.xml.dist
+docker-compose.yml
+Dockerfile

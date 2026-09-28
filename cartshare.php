@@ -3,7 +3,7 @@
  * Plugin Name: WP CartShare Pro
  * Plugin URI:  https://github.com/cartshare/cartshare
  * Description: Persist and share WooCommerce carts via secure tokenized URLs.
- * Version:     1.0.1
+ * Version:     1.0.0
  * Author:      Samuel Mukoti
  * Author URI:  mailto:sam@melivo.com
  * License:     GPL-2.0-or-later
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CARTSHARE_VERSION', '1.0.1' );
+define( 'CARTSHARE_VERSION', '1.0.0' );
 define( 'CARTSHARE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'CARTSHARE_URL', plugin_dir_url( __FILE__ ) );
 

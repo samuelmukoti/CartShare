@@ -38,6 +38,15 @@ composer install
 vendor/bin/phpunit
 ```
 
+## Releasing
+
+Releases are tag-driven via `.github/workflows/release.yml`:
+
+1. Bump the version in `cartshare.php` (header + `CARTSHARE_VERSION`), `readme.txt` (`Stable tag` + a `= X.Y.Z =` changelog entry), and `languages/cartshare.pot`; merge to `main`.
+2. Tag and push: `git tag -a v1.2.3 -m "v1.2.3" && git push origin v1.2.3`
+
+The workflow checks that the tag matches the plugin version, runs WPCS + PHPUnit, builds `cartshare-X.Y.Z.zip` (excluding everything in `.distignore`), and publishes a GitHub Release with the zip, a SHA-256 checksum, and the changelog entry. Tags with a suffix (e.g. `v1.2.3-rc.1`) are published as pre-releases.
+
 ## Project intent
 
 The AI agent reads `AGENTS.md` for context about what this plugin does and how to make changes. Update it as the project evolves.
